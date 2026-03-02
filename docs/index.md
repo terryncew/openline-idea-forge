@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Idea Forge · OpenLine</title>
 
+  <!-- Share preview (add og.png at /og.png) -->
+  <meta property="og:title" content="Idea Forge · OpenLine"/>
+  <meta property="og:description" content="Turn a weird thought into a testable plan. No logins. Leave with a GitHub Issue + YAML pack."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://terryncew.github.io/openline-idea-forge/"/>
+  <meta property="og:image" content="https://terryncew.github.io/openline-idea-forge/og.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet"/>
 
@@ -103,6 +111,12 @@
     @keyframes pulse{
       0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,255,136,.35)}
       50%{opacity:.7;box-shadow:0 0 0 6px rgba(0,255,136,0)}
+    }
+
+    /* NEW: instant actions */
+    .top-actions{
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+      margin:2px 0 16px;
     }
 
     .steps-track{
@@ -225,6 +239,35 @@
       background:rgba(248,113,113,.06);
       border-radius:8px;border:1px solid rgba(248,113,113,.18);
     }
+
+    /* NEW: cheat risk legend + guide */
+    #riskLegend{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.02);
+      border-radius:12px;
+      padding:12px;
+      margin:12px 0 14px;
+    }
+    #riskLegend .t{font-weight:900;font-size:13px;margin-bottom:6px}
+    #riskLegend .p{color:var(--muted);font-size:12px;line-height:1.55;margin-bottom:10px}
+    #riskLegend .row{display:flex;gap:8px;flex-wrap:wrap}
+    #riskLegend .chip{
+      font-family:var(--mono);font-size:10px;
+      padding:6px 10px;border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.02);
+      color:var(--muted);
+    }
+    #riskLegend .chip b{color:var(--text);font-family:var(--display);font-weight:900}
+    #riskGuide{
+      margin-top:10px;
+      border-left:2px solid var(--blue);
+      background:rgba(56,189,248,.06);
+      border-radius:0 10px 10px 0;
+      padding:10px 12px;
+    }
+    #riskGuide .h{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
+    #riskGuide .c{font-size:12px;line-height:1.55;color:var(--text)}
 
     .nav-row{
       display:flex;align-items:center;justify-content:space-between;
@@ -354,6 +397,13 @@
     </div>
   </div>
 
+  <!-- NEW: instant conversion for drive-by traffic -->
+  <div class="top-actions">
+    <button class="btn primary" id="quickGen">Generate sample pack</button>
+    <button class="btn ghost" id="quickCopy" disabled>Copy Issue body</button>
+    <a class="btn ghost" href="https://github.com/terryncew/openline-idea-forge/issues/new" target="_blank" rel="noopener">Open blank Issue</a>
+  </div>
+
   <div class="steps-track" id="stepTrack">
     <div class="step-pill active" data-step="0"><span class="snum">1</span> Topic</div>
     <div class="step-pill" data-step="1"><span class="snum">2</span> Project</div>
@@ -380,6 +430,25 @@
           <div class="section-label">Step 2 of 4</div>
           <div class="step-title">Pick a project</div>
           <div class="step-desc">Each mission includes: a claim, the common shortcut, court tests, and a cheap falsifier.</div>
+
+          <!-- NEW: explain cheat risk in plain language + tell them what to do -->
+          <div id="riskLegend">
+            <div class="t">What “cheat_risk” means</div>
+            <div class="p">
+              Cheat risk = how easy it is to get a “win” that isn’t real.
+              High risk means the system can look successful while secretly taking an easier path.
+            </div>
+            <div class="row">
+              <div class="chip"><b style="color:var(--green)">LOW</b> — hard to fake. Basic checks usually catch it.</div>
+              <div class="chip"><b style="color:var(--amber)">MED</b> — some controls needed. Replicate + watch decay.</div>
+              <div class="chip"><b style="color:var(--red)">HIGH</b> — easy to fake. Require strict controls + outside verification.</div>
+            </div>
+            <div id="riskGuide">
+              <div class="h">How to use this</div>
+              <div class="c" id="riskGuideText">Pick a project to see the recommended proof discipline.</div>
+            </div>
+          </div>
+
           <div class="sel-grid" id="projectsGrid"></div>
           <div class="nav-row">
             <button class="btn ghost" id="back0">Back</button>
@@ -475,7 +544,7 @@
 
         <div class="copy-row">
           <button class="btn sm" id="copyBtn">Copy</button>
-          <a class="btn sm primary" id="ghLink" href="#" target="_blank" rel="noopener" style="opacity:.4;pointer-events:none">Open Issue</a>
+          <a class="btn sm primary" id="ghLink" href="#" target="_blank" rel="noopener" style="opacity:.4;pointer-events:none">Open blank Issue</a>
         </div>
 
         <div class="output-box" id="outputBox">(generate to see output)</div>
@@ -743,14 +812,23 @@
     });
   }
 
+  // NEW: cheat risk now PENALIZES score (old code rewarded high cheat risk)
   function computeScore(p){
     if (!p) return 0;
-    const base = 50;
+    const base = 55;
     const witness = Math.min(20, (p.witnesses?.length||0)*5);
-    const cheat = p.cheat_risk === "high" ? 10 : (p.cheat_risk === "medium" ? 6 : 3);
     const setup = (SETUPS.find(x=>x.key===state.setup)?.score)||0;
     const win = (WINDOWS.find(x=>x.key===state.window)?.score)||0;
-    return Math.min(100, base + witness + cheat + setup + win);
+    const cheatPenalty = p.cheat_risk === "high" ? 12 : (p.cheat_risk === "medium" ? 7 : 3);
+    return Math.max(0, Math.min(100, base + witness + setup + win - cheatPenalty));
+  }
+
+  function riskGuideText(p){
+    if (!p) return "Pick a project to see the recommended proof discipline.";
+    const r = p.cheat_risk;
+    if (r === "high") return "HIGH: Assume it can fake a win. Do strict controls first, then independent verification. If controls fail, stop.";
+    if (r === "medium") return "MED: Do controls + a replicate. Watch for decay/side-effects. If replicate fails, stop.";
+    return "LOW: Still test it, but basic controls usually catch failure. Run the cheap falsifier first, then scale time window.";
   }
 
   function updatePreview(){
@@ -773,6 +851,9 @@
     $("failBlock").style.opacity = "1";
     $("previewClaim").textContent = p.claim;
     $("previewFalsifier").textContent = p.falsifier;
+
+    const rg = $("riskGuideText");
+    if (rg) rg.textContent = riskGuideText(p);
 
     const wl = $("witnessList");
     wl.innerHTML = "";
@@ -807,7 +888,17 @@
     $("toolSchema").textContent = JSON.stringify(tool, null, 2);
   }
 
-  function esc(s){ return String(s||"").replaceAll('"','\\"'); }
+  // NEW: safer YAML (block scalars for text fields)
+  function escYamlQuoted(s){
+    return String(s||"")
+      .replaceAll("\\", "\\\\")
+      .replaceAll('"', '\\"');
+  }
+  function yamlBlock(key, value, indent=""){
+    const lines = String(value ?? "").split("\n");
+    const body = lines.map(l => `${indent}  ${l}`).join("\n");
+    return `${indent}${key}: |-\n${body}\n`;
+  }
 
   function buildArtifact(){
     const p = state.project;
@@ -833,13 +924,18 @@ RANKING:
 - setup: ${setup.key}
 - time_window: ${win.key}
 
+CHEAT RISK (what it means):
+- low: hard to fake a win
+- medium: needs controls + replicate
+- high: easy to fake — require strict controls + outside verification
+
 LIMITS:
 ${limitLines}
 
 CLAIM:
 - ${p.claim}
 
-COMMON SHORTCUT:
+COMMON SHORTCUT (how it fakes a win):
 - ${p.cheat}
 
 COURT TESTS:
@@ -861,44 +957,57 @@ NOTES:
 - ${p.notes}
 `;
 
+    const limitsYaml = (p.limits||[]).map(x=>`  - "${escYamlQuoted(x)}"`).join("\n");
+    const courtYaml = (p.witnesses||[]).map(w=>`  - id: "${escYamlQuoted(w[0])}"
+    role: "${escYamlQuoted(w[1])}"
+    hardness: "${escYamlQuoted(w[2])}"
+    pass_condition: "${escYamlQuoted(w[3])}"
+    fail_condition: "${escYamlQuoted(w[4])}"`).join("\n");
+
+    const minPlanYaml = win.plan.map((s,i)=>`  - tier: "${i===0?"cheap":i===1?"mid":"expensive"}"
+    step: |-
+      ${String(s).replaceAll("\n","\n      ")}`).join("\n");
+
     state.yamlBody =
 `schema_version: "idea_forge.v1"
 kind: "opportunity_pack"
 id: "${id}"
 topic: "${state.topic}"
 domain: "${p.domain}"
-title: "${esc(p.title)}"
+title: "${escYamlQuoted(p.title)}"
 ranking:
   testability_score: ${score}
   setup: "${setup.key}"
   time_window: "${win.key}"
+cheat_risk: "${p.cheat_risk}"
 limits:
-${(p.limits||[]).map(x=>`  - "${esc(x)}"`).join("\n")}
-goal_kpi: "${esc(p.kpi)}"
-claim: "${esc(p.claim)}"
-common_shortcut: "${esc(p.cheat)}"
+${limitsYaml}
+${yamlBlock("goal_kpi", p.kpi)}
+${yamlBlock("claim", p.claim)}
+${yamlBlock("common_shortcut", p.cheat)}
 court_tests:
-${(p.witnesses||[]).map(w=>`  - id: "${w[0]}"
-    role: "${w[1]}"
-    hardness: "${w[2]}"
-    pass_condition: "${esc(w[3])}"
-    fail_condition: "${esc(w[4])}"`).join("\n")}
-falsifier: "${esc(p.falsifier)}"
+${courtYaml}
+${yamlBlock("falsifier", p.falsifier)}
 min_plan:
-${win.plan.map((s,i)=>`  - tier: "${i===0?"cheap":i===1?"mid":"expensive"}"
-    step: "${esc(s)}"`).join("\n")}
-beneficiary: "${esc(p.buyer)}"
-notes: "${esc(p.notes)}"
+${minPlanYaml}
+${yamlBlock("beneficiary", p.buyer)}
+${yamlBlock("notes", p.notes)}
 receipt_family: "openline.science.v1"
 `;
 
     renderOutput();
+
+    // NEW: avoid URL-length failures — open blank issue with title only
     const title = `Opportunity Pack: ${p.domain.toUpperCase()} — ${p.title}`;
-    state.ghUrl = `${REPO_NEW_ISSUE}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(state.issueBody)}`;
+    state.ghUrl = `${REPO_NEW_ISSUE}?title=${encodeURIComponent(title)}`;
     const link = $("ghLink");
+    link.textContent = "Open blank Issue";
     link.href = state.ghUrl;
     link.style.opacity = "1";
     link.style.pointerEvents = "auto";
+
+    // enable quick copy
+    $("quickCopy").disabled = false;
 
     goStep(3);
   }
@@ -930,6 +1039,28 @@ receipt_family: "openline.science.v1"
     }
   }
 
+  async function doQuickCopyIssue(){
+    if (!state.issueBody) return;
+    try{
+      await navigator.clipboard.writeText(state.issueBody);
+      const btn = $("quickCopy");
+      const prev = btn.textContent;
+      btn.textContent = "✓ Copied Issue";
+      setTimeout(()=>btn.textContent=prev, 1400);
+    }catch(e){
+      alert("Copy failed. Select text manually and copy.");
+    }
+  }
+
+  function quickGenerate(){
+    if (!state.project){
+      renderProjects();
+    }
+    buildArtifact();
+    switchTab("issue");
+    goStep(3);
+  }
+
   $("to1").onclick = ()=>goStep(1);
   $("to2").onclick = ()=>goStep(2);
   $("to3").onclick = ()=>goStep(3);
@@ -942,6 +1073,10 @@ receipt_family: "openline.science.v1"
   $("tabIssue").onclick = ()=>switchTab("issue");
   $("tabYaml").onclick = ()=>switchTab("yaml");
   $("copyBtn").onclick = doCopy;
+
+  // NEW: top actions
+  $("quickGen").onclick = quickGenerate;
+  $("quickCopy").onclick = doQuickCopyIssue;
 
   renderTopics();
   renderProjects();
