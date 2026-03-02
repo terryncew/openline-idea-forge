@@ -64,6 +64,16 @@ button.primary{border-color:rgba(110,168,255,.40);background:linear-gradient(135
 .bad{color:var(--bad);border-color:rgba(255,107,107,.55)}
 hr{border:none;border-top:1px solid var(--line);margin:14px 0}
 .hidden{display:none}
+.cards{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
+@media(min-width:920px){.cards{grid-template-columns:1fr 1fr}}
+.mission{
+  border:1px solid var(--line); border-radius:14px; padding:12px; background:rgba(255,255,255,.03);
+  cursor:pointer;
+}
+.mission:hover{ border-color: rgba(110,168,255,.45); }
+.mtitle{font-weight:900;margin:0 0 6px}
+.mmeta{margin:0;color:var(--muted);font-size:13px;line-height:1.35}
+.sel{ outline: 2px solid rgba(110,168,255,.45); }
 </style>
 </head>
 <body>
@@ -71,27 +81,37 @@ hr{border:none;border-top:1px solid var(--line);margin:14px 0}
 
   <div class="hero">
     <h1>Idea Forge</h1>
-    <p class="lead">A mini-game that turns “cool idea” into a Court-ready Opportunity Pack. You’ll finish with a real artifact you can submit.</p>
+    <p class="lead">Pick an interest. Choose a solvable mission. Get a real Opportunity Pack + one-click GitHub Issue. No typing required.</p>
     <div class="row">
-      <span class="pill">Level 1: Claim</span>
-      <span class="pill">Level 2: Cheat Path (Boss)</span>
-      <span class="pill">Level 3: Court</span>
-      <span class="pill">Level 4: Falsifier</span>
-      <span class="pill">Reward: GitHub Issue + YAML</span>
+      <span class="pill">Guided</span>
+      <span class="pill">Not spooky</span>
+      <span class="pill">Ends with a real artifact</span>
+      <span class="pill">Shareable</span>
     </div>
   </div>
 
   <div class="grid">
     <div class="card">
       <div class="kpi">
-        <div class="stageTitle" id="stageTitle">Level 1/4 · The Claim</div>
+        <div class="stageTitle" id="stageTitle">Step 1/2 · Pick a Mission</div>
         <div class="xp" id="xp">XP: 0</div>
       </div>
-      <div class="bar" aria-label="progress"><div id="barFill"></div></div>
+      <div class="bar"><div id="barFill"></div></div>
 
-      <!-- Stage 1 -->
-      <div id="stage1">
-        <p class="tip"><b>Rule:</b> One sentence. Measurable. If it can’t be measured, it’s poetry (poetry is great, different lane).</p>
+      <label>Interest</label>
+      <select id="interest"></select>
+
+      <div class="tip"><b>Choose a mission.</b> These are designed to be solvable with today’s tools (and to fail loudly if they’re fake).</div>
+      <div class="cards" id="missions"></div>
+
+      <div class="btnrow">
+        <button class="primary" id="generate">Generate Artifact →</button>
+        <button id="toggleEdit">Optional: Edit Mode</button>
+      </div>
+
+      <div id="editBox" class="hidden">
+        <hr/>
+        <div class="tip"><b>Edit Mode</b> (optional). If you’re lazy, ignore this. The defaults are good.</div>
 
         <label>Domain</label>
         <select id="domain">
@@ -99,207 +119,241 @@ hr{border:none;border-top:1px solid var(--line);margin:14px 0}
           <option value="batteries">Batteries</option>
           <option value="co2">CO₂ Electrolysis</option>
           <option value="synbio">SynBio</option>
+          <option value="chips">Microchips</option>
         </select>
 
         <label>Goal (KPI)</label>
-        <select id="goal"></select>
+        <input id="goal"/>
 
-        <label>Write your claim (one sentence)</label>
-        <input id="claim" placeholder="Example: Cut loop burn by 30% on SWE-style tasks without increasing false kills." />
+        <label>Claim</label>
+        <textarea id="claim"></textarea>
 
-        <div class="btnrow">
-          <button class="primary" id="next1">Next →</button>
-        </div>
-        <p class="small">Pro tip: keep it boring. Boring claims are easier to prove.</p>
-      </div>
+        <label>Cheat path</label>
+        <textarea id="cheatPath"></textarea>
 
-      <!-- Stage 2 -->
-      <div id="stage2" class="hidden">
-        <p class="tip"><span class="badge warn">Boss fight</span> The system will try to “win” without doing the real task. Name the easiest lie first.</p>
+        <label>Falsifier</label>
+        <textarea id="falsifier"></textarea>
 
-        <label>Cheat risk (what usually fakes wins here)</label>
-        <select id="cheat"></select>
+        <label>Buyer</label>
+        <input id="buyer"/>
 
-        <label>CHEAT_PATH (write the easiest way your claim could look true while being fake)</label>
-        <textarea id="cheatPath" placeholder="Example: It ‘solves’ by repeating low-entropy actions, or by redefining ‘done’ so failures look like success."></textarea>
-
-        <div class="btnrow">
-          <button id="back2">← Back</button>
-          <button class="primary" id="next2">Next →</button>
-        </div>
-        <p class="small">If you can’t name the cheat path, you don’t own the claim yet.</p>
-      </div>
-
-      <!-- Stage 3 -->
-      <div id="stage3" class="hidden">
-        <p class="tip">Now we build the Court: 3–4 independent witnesses. Different angles. Different failure modes.</p>
-
-        <label>Proof mode</label>
-        <select id="proof">
-          <option value="cheap">Cheap proof (fast kill)</option>
-          <option value="balanced" selected>Balanced</option>
-          <option value="strict">Strict (hard to pass)</option>
-        </select>
-
-        <label>Buyer (who pays if true?)</label>
-        <input id="buyer" placeholder="Example: Teams shipping production agents (cost + incident risk)." />
-
-        <label>Notes (risks / assumptions)</label>
-        <textarea id="notes" placeholder="Example: depends on task mix; needs held-out evaluation; watch false stops."></textarea>
-
-        <div class="btnrow">
-          <button id="back3">← Back</button>
-          <button class="primary" id="next3">Next →</button>
-        </div>
-      </div>
-
-      <!-- Stage 4 -->
-      <div id="stage4" class="hidden">
-        <p class="tip"><b>Final move:</b> write the falsifier. The cheapest observation that kills the claim. This is what makes it real.</p>
-
-        <label>FALSIFIER (cheapest kill switch)</label>
-        <textarea id="falsifier" placeholder="Example: If held-out pass rate does not improve AND loop rate does not fall under the cheat suppression witness, the claim fails."></textarea>
-
-        <div class="btnrow">
-          <button id="back4">← Back</button>
-          <button class="primary" id="finish">Finish → Generate Artifact</button>
-        </div>
-        <p class="small">If you can’t write the falsifier, you’re not done. That’s fine—most people aren’t.</p>
-      </div>
-
-      <!-- Finish -->
-      <div id="stage5" class="hidden">
-        <p class="tip"><span class="badge good">Reward</span> You now have a Court-ready Opportunity Pack. This is the part where most “ideas” die. Yours didn’t.</p>
-
-        <div class="btnrow">
-          <button id="copyIssue">Copy Issue Body</button>
-          <button id="copyYaml">Copy YAML</button>
-          <a class="btn primary" id="openIssue" target="_blank" rel="noopener">Open GitHub Issue</a>
-        </div>
-
-        <hr/>
-
-        <div class="small">Issue body</div>
-        <div class="mini" id="outIssue"></div>
-
-        <div style="height:10px"></div>
-        <div class="small">YAML pack</div>
-        <div class="mini" id="outYaml"></div>
-
-        <p class="small">Share tip: screenshot this “Reward” screen. That’s your viral proof-of-work.</p>
+        <label>Notes</label>
+        <textarea id="notes"></textarea>
       </div>
     </div>
 
     <div class="card">
-      <h2>How the game teaches you</h2>
-      <p class="tip"><b>Level 1 (Claim):</b> forces measurability.</p>
-      <p class="tip"><b>Level 2 (Cheat Path):</b> forces humility. Most “breakthroughs” are just metric hacks.</p>
-      <p class="tip"><b>Level 3 (Court):</b> forces independent witnesses instead of one leaderboard.</p>
-      <p class="tip"><b>Level 4 (Falsifier):</b> turns belief into a bet with a clear loss condition.</p>
+      <h2>Artifact (what you leave with)</h2>
+      <p class="tip">This is the “holy shit, this is real” moment: a Court-ready issue body + YAML pack.</p>
+
+      <div class="btnrow">
+        <button id="copyIssue">Copy Issue Body</button>
+        <button id="copyYaml">Copy YAML</button>
+        <a class="btn primary" id="openIssue" target="_blank" rel="noopener">Open GitHub Issue</a>
+      </div>
+
       <hr/>
-      <p class="small">Not spooky version of the whole idea: we’re building a fair scoreboard that can’t be quietly rewritten.</p>
+
+      <div class="small">Issue body</div>
+      <div class="mini" id="outIssue">(pick a mission → generate)</div>
+
+      <div style="height:10px"></div>
+
+      <div class="small">YAML</div>
+      <div class="mini" id="outYaml">(pick a mission → generate)</div>
+
+      <p class="small">Viral move: screenshot this artifact panel and post it as “I just generated a testable idea pack in 60 seconds.”</p>
     </div>
   </div>
 </div>
 
 <script>
-  // Change this if you rename the repo:
-  const REPO_NEW_ISSUE_URL = "https://github.com/terryncew/openline-idea-forge/issues/new";
+const REPO_NEW_ISSUE_URL = "https://github.com/terryncew/openline-idea-forge/issues/new";
 
-  const presets = {
-    agents: {
-      goals: ["Reduce cost-per-solved", "Reduce loop rate", "Increase pass@1", "Reduce false stops"],
-      cheats: ["Loop/idle burn", "Definition-of-done hacks", "Benchmark gaming", "Non-reproducible success"],
-      witnesses: [
-        ["W1_REPLAY","origin","hard","Deterministic replay reproduces outcome","Outcome not reproducible under replay"],
-        ["W2_LOOP","cheat_suppression","hard","Repeated signatures bounded in window","Repetition exceeds bound (zombie loop)"],
-        ["W3_TESTS","stability","hard","Regression/tests pass on completion","Tests fail or regressions spike"],
-        ["W4_COST","cost_feasibility","soft","Cost-per-solved within cap vs baseline","Cost-per-solved worsens beyond cap"]
-      ],
-      cheatDefault: "Agent ‘wins’ by padding steps (repeating low-entropy actions) or by redefining what counts as done."
-    },
-    batteries: {
-      goals: ["Improve CE", "Reduce impedance growth", "Reduce gas evolution", "Improve cycle life at high V"],
-      cheats: ["Short-cycle illusion", "Impurity-sensitive effect", "Hidden parasitics", "Thermal instability"],
-      witnesses: [
-        ["W1_ORIGIN","origin","hard","Effect replicates in separate build/batch","Effect vanishes on independent replicate"],
-        ["W2_PARASITICS","cheat_suppression","hard","Gas/EIS proxies bounded","Parasitics dominate (gas spike / EIS runaway)"],
-        ["W3_STABILITY","stability","hard","CE+EIS drift within bounds over N cycles","CE collapses or EIS drift exceeds bound"],
-        ["W4_COST","cost_feasibility","soft","Feasible additive + safety constraints","Prohibitive cost or safety violation"]
-      ],
-      cheatDefault: "Looks good for 5–10 cycles, then parasitics dominate and the win disappears."
-    },
-    co2: {
-      goals: ["Increase FE to target", "Suppress HER", "Improve time-on-stream", "Lower energy per mole"],
-      cheats: ["HER dominance", "Carbon balance not closed", "Short peak performance", "Contamination artifacts"],
-      witnesses: [
-        ["W1_CARBON","origin","hard","Carbon balance closes","Carbon balance does not close"],
-        ["W2_HER","cheat_suppression","hard","HER bounded at target current","HER dominates current"],
-        ["W3_TOS","stability","hard","Stable time-on-stream for T hours","Rapid decay / deactivation"],
-        ["W4_DURABILITY","cost_feasibility","soft","Durability acceptable","Fast degradation / high replacement cost"]
-      ],
-      cheatDefault: "System ‘wins’ by making hydrogen or by hiding missing carbon in accounting."
-    },
-    synbio: {
-      goals: ["Increase yield", "Increase stability", "Reduce assay noise", "Reduce cost per gram"],
-      cheats: ["Assay artifact", "Contamination", "Non-scalable expression", "Short-lived activity"],
-      witnesses: [
-        ["W1_CONTROLS","origin","hard","Negative + contamination controls clean","Signal present in blanks/controls"],
-        ["W2_ORTHO","cheat_suppression","hard","Orthogonal assay confirms activity","Second assay contradicts"],
-        ["W3_HALFLIFE","stability","hard","Half-life meets bound at process conditions","Rapid deactivation"],
-        ["W4_YIELD","cost_feasibility","soft","Expression/yield feasible","Unscalable yield"]
-      ],
-      cheatDefault: "Assay artifacts or contamination produce a fake ‘hit’ that vanishes under controls."
-    }
-  };
+const catalog = [
+  // AGENTS
+  {
+    interest:"Agents",
+    id:"AG-LOOPKILL",
+    domain:"agents",
+    title:"Kill Zombie Loops without killing winners",
+    kpi:"Reduce cost-per-solved without false-stops",
+    claim:"A loop governor reduces repeated-action burn by ≥30% on SWE-style tasks while keeping false stops ≤2%.",
+    cheat:"It ‘wins’ by getting stricter in a way that just kills hard-but-solvable tasks (quietly lowering denominator).",
+    falsifier:"Fails if held-out solved rate drops OR false stops exceed 2% while loop burn does not fall by ≥30%.",
+    buyer:"Any team shipping production agents (cost + incident risk).",
+    notes:"Use held-out tasks. Lock solved rubric. Track cost-per-solved, loop rate, and false stops.",
+    witnesses:[
+      ["W1_REPLAY","origin","hard","Deterministic replay reproduces outcome","Outcome not reproducible under replay"],
+      ["W2_LOOP","cheat_suppression","hard","Repeated signatures bounded in window","Repetition exceeds bound (zombie loop)"],
+      ["W3_TESTS","stability","hard","Regression/tests pass on completion","Tests fail or regressions spike"],
+      ["W4_COST","cost_feasibility","soft","Cost-per-solved improves or stays within cap","Cost-per-solved worsens beyond cap"]
+    ]
+  },
+  {
+    interest:"Agents",
+    id:"AG-EVALCOURT",
+    domain:"agents",
+    title:"Court-style eval that predicts incidents better than one leaderboard",
+    kpi:"Increase correlation with real failures",
+    claim:"A 3-witness eval (replay + cost + stability) predicts production incident rate better than a single benchmark score.",
+    cheat:"It ‘wins’ by picking witnesses that correlate on one dataset but don’t generalize.",
+    falsifier:"Fails if correlation advantage disappears on a new workload slice (different repos/tools).",
+    buyer:"Labs and platforms shipping agent products; internal eval teams.",
+    notes:"Run on two different task mixes. Hold out one mix completely.",
+    witnesses:[
+      ["W1_INDEP","origin","hard","Holds on held-out workload slice","Breaks on held-out slice"],
+      ["W2_REPLAY","replay","hard","Deterministic rerun matches outcome","Not reproducible"],
+      ["W3_COST","cost_feasibility","soft","Cost-per-solved improves or stable","Cost balloons with no reliability gain"]
+    ]
+  },
 
-  const el = id => document.getElementById(id);
-  let xp = 0;
+  // CLIMATE / CO2
+  {
+    interest:"Climate",
+    id:"CO2-HER",
+    domain:"co2",
+    title:"Stop the CO₂ system from cheating into hydrogen",
+    kpi:"High FE to CO with bounded HER + stability",
+    claim:"A CO₂RR setup holds FE(CO) ≥90% at target current while keeping HER below the bound for ≥10 hours time-on-stream.",
+    cheat:"It ‘wins’ via bad accounting (carbon balance doesn’t close) or a short peak that collapses after minutes.",
+    falsifier:"Fails if carbon balance doesn’t close OR FE collapses before 10 hours OR HER dominates current.",
+    buyer:"CO₂ electrolysis startups and industrial R&D.",
+    notes:"Carbon balance is non-negotiable. Time-on-stream matters more than peak FE.",
+    witnesses:[
+      ["W1_CARBON","origin","hard","Carbon balance closes","Carbon balance does not close"],
+      ["W2_HER","cheat_suppression","hard","HER bounded at target current","HER dominates current"],
+      ["W3_TOS","stability","hard","Stable time-on-stream ≥10h","Rapid decay/deactivation"],
+      ["W4_DURABILITY","cost_feasibility","soft","Durability acceptable","Fast degradation/high replacement cost"]
+    ]
+  },
 
-  function setXP(v){ xp = v; el("xp").textContent = `XP: ${xp}`; }
-  function setBar(p){ el("barFill").style.width = `${p}%`; }
+  // BATTERIES
+  {
+    interest:"Energy",
+    id:"BAT-SEI",
+    domain:"batteries",
+    title:"SEI win that survives parasitics (not a 10-cycle mirage)",
+    kpi:"CE + impedance stability",
+    claim:"An additive improves CE by ≥1% and reduces impedance growth while keeping gas evolution below threshold over ≥100 cycles.",
+    cheat:"It looks great early but parasitics (gas/impedance) explode later; or it’s impurity-sensitive and won’t replicate.",
+    falsifier:"Fails if independent replicate loses the effect OR parasitic proxy rises beyond bound OR CE gain disappears by cycle 100.",
+    buyer:"Battery startups, electrolyte suppliers, OEM labs.",
+    notes:"Track gas/EIS, not just capacity. Replicate on a second batch.",
+    witnesses:[
+      ["W1_ORIGIN","origin","hard","Effect replicates on separate build/batch","Effect vanishes on replicate"],
+      ["W2_PARASITICS","cheat_suppression","hard","Gas/EIS bounded","Parasitics dominate"],
+      ["W3_STABILITY","stability","hard","CE+EIS within bounds ≥100 cycles","CE collapses/EIS runaway"],
+      ["W4_COST","cost_feasibility","soft","Feasible + safe","Prohibitive or unsafe"]
+    ]
+  },
 
-  function show(stage){
-    ["stage1","stage2","stage3","stage4","stage5"].forEach(id => el(id).classList.add("hidden"));
-    el(stage).classList.remove("hidden");
+  // MICROCHIPS (not chemistry, still court)
+  {
+    interest:"Microchips",
+    id:"CHIP-YIELD",
+    domain:"chips",
+    title:"AI that improves yield without hiding the scrap",
+    kpi:"Yield up, scrap accounting honest",
+    claim:"A process-change recommender improves yield by ≥X% while keeping defect accounting consistent (no hidden reclassification).",
+    cheat:"It ‘wins’ by relabeling defects or shifting scrap categories (accounting hack).",
+    falsifier:"Fails if yield gain disappears when defects are audited with a fixed taxonomy and blind review.",
+    buyer:"Foundry ops / advanced packaging / test teams.",
+    notes:"Lock defect taxonomy. Require blind audit. Track yield + rework + scrap.",
+    witnesses:[
+      ["W1_AUDIT","origin","hard","Blind audit confirms defect taxonomy unchanged","Taxonomy drift / relabeling detected"],
+      ["W2_STABILITY","stability","hard","Gain holds over multiple lots","One-lot spike only"],
+      ["W3_COST","cost_feasibility","soft","Cost per good die improves","Cost balloons with no net gain"]
+    ]
+  },
+
+  // SYNBIO
+  {
+    interest:"Health",
+    id:"BIO-CONTROLS",
+    domain:"synbio",
+    title:"Enzyme hit that survives controls + orthogonal assay",
+    kpi:"Real activity, not assay artifact",
+    claim:"A candidate shows activity improvement ≥Y% and survives contamination controls + an orthogonal assay confirmation.",
+    cheat:"Fluorescence/assay artifact or contamination produces a fake hit.",
+    falsifier:"Fails if signal appears in blanks/controls OR the orthogonal assay contradicts the first assay.",
+    buyer:"Industrial biotech, assay-heavy R&D teams.",
+    notes:"Two assays or it didn’t happen. Controls are the product.",
+    witnesses:[
+      ["W1_CONTROLS","origin","hard","Controls clean","Signal in blanks/controls"],
+      ["W2_ORTHO","cheat_suppression","hard","Orthogonal assay confirms","Second assay contradicts"],
+      ["W3_HALFLIFE","stability","hard","Half-life meets bound","Rapid deactivation"],
+      ["W4_YIELD","cost_feasibility","soft","Yield feasible","Unscalable yield"]
+    ]
   }
+];
 
-  function refresh(){
-    const d = el("domain").value;
-    el("goal").innerHTML = presets[d].goals.map(x => `<option>${x}</option>`).join("");
-    el("cheat").innerHTML = presets[d].cheats.map(x => `<option>${x}</option>`).join("");
-    if (!el("cheatPath").value) el("cheatPath").value = presets[d].cheatDefault;
-  }
+const interests = [...new Set(catalog.map(x => x.interest))];
 
-  function genID(domain){
-    const stamp = new Date().toISOString().slice(2,10).replaceAll("-","");
-    return `OP-${domain.toUpperCase()}-${stamp}`;
-  }
+const el = id => document.getElementById(id);
+let selected = null;
 
-  function buildArtifact(){
-    const domain = el("domain").value;
-    const goal = el("goal").value;
-    const cheat = el("cheat").value;
-    const claim = (el("claim").value || "").trim();
-    const cheatPath = (el("cheatPath").value || "").trim();
-    const proof = el("proof").value;
-    const buyer = (el("buyer").value || "").trim();
-    const notes = (el("notes").value || "").trim();
-    const falsifier = (el("falsifier").value || "").trim();
+function setXP(v){ el("xp").textContent = `XP: ${v}`; el("barFill").style.width = `${v}%`; }
 
-    const id = genID(domain);
-    const preset = presets[domain];
+function renderInterests(){
+  el("interest").innerHTML = interests.map(x => `<option>${x}</option>`).join("");
+}
 
-    let escape = [];
-    if (proof === "cheap") escape = ["Independent rerun", "Longer window (2x)", "Tighter stop-rule + rollback"];
-    if (proof === "balanced") escape = ["Independent rerun", "Longer window", "Stricter measurement/control"];
-    if (proof === "strict") escape = ["Independent rerun (different environment/batch)", "Long stability window", "Orthogonal measurement", "External replication if possible"];
+function renderMissions(){
+  const pick = el("interest").value;
+  const items = catalog.filter(x => x.interest === pick);
+  const box = el("missions");
+  box.innerHTML = "";
+  items.forEach((m, idx) => {
+    const div = document.createElement("div");
+    div.className = "mission";
+    div.innerHTML = `<p class="mtitle">${m.title}</p>
+      <p class="mmeta"><b>Solvable today:</b> yes · <b>KPI:</b> ${m.kpi}</p>`;
+    div.onclick = () => selectMission(m, div);
+    box.appendChild(div);
+    if (idx === 0 && !selected) selectMission(m, div);
+  });
+}
 
-    const witnessesText = preset.witnesses
-      .map(w => `- ${w[0]} (${w[1]}, ${w[2]}): PASS if ${w[3]}. FAIL if ${w[4]}.`)
-      .join("\n");
+function selectMission(m, div){
+  selected = m;
+  document.querySelectorAll(".mission").forEach(x => x.classList.remove("sel"));
+  div.classList.add("sel");
+  setXP(50);
+  // prefill edit mode fields
+  el("domain").value = m.domain === "chips" ? "chips" : m.domain;
+  el("goal").value = m.kpi;
+  el("claim").value = m.claim;
+  el("cheatPath").value = m.cheat;
+  el("falsifier").value = m.falsifier;
+  el("buyer").value = m.buyer;
+  el("notes").value = m.notes;
+}
 
-    const issueBody =
+function genID(domain){
+  const stamp = new Date().toISOString().slice(2,10).replaceAll("-","");
+  return `OP-${domain.toUpperCase()}-${stamp}`;
+}
+
+function buildArtifact(fromEdit=false){
+  const m = selected;
+  if (!m) return;
+
+  const domain = fromEdit ? (el("domain").value || m.domain) : m.domain;
+  const kpi = fromEdit ? (el("goal").value || m.kpi) : m.kpi;
+  const claim = fromEdit ? (el("claim").value || m.claim) : m.claim;
+  const cheat = fromEdit ? (el("cheatPath").value || m.cheat) : m.cheat;
+  const falsifier = fromEdit ? (el("falsifier").value || m.falsifier) : m.falsifier;
+  const buyer = fromEdit ? (el("buyer").value || m.buyer) : m.buyer;
+  const notes = fromEdit ? (el("notes").value || m.notes) : m.notes;
+
+  const id = genID(domain);
+
+  const witnessesText = (m.witnesses || []).map(w =>
+    `- ${w[0]} (${w[1]}, ${w[2]}): PASS if ${w[3]}. FAIL if ${w[4]}.`
+  ).join("\n");
+
+  const issueBody =
 `ID: ${id}
 DOMAIN: ${domain}
 
@@ -307,7 +361,7 @@ CLAIM:
 - ${claim}
 
 CHEAT_PATH:
-- ${cheatPath} (risk: ${cheat})
+- ${cheat}
 
 COURT_TESTS (independent witnesses):
 ${witnessesText}
@@ -317,7 +371,9 @@ FALSIFIER:
 
 ESCAPE_HATCH:
 - If performance spike is huge but one witness fails, require:
-  ${escape.map(x => `- ${x}`).join("\n  ")}
+  - Independent rerun (fresh environment/batch)
+  - Longer window (2x)
+  - Stricter measurement/control
 
 MIN_VALIDATION:
 - Step 1 (cheap): smallest test that hits Origin + Cheat suppression.
@@ -328,86 +384,60 @@ BUYER:
 - ${buyer}
 
 WHY THEY CARE:
-- Goal/KPI: ${goal}
+- KPI: ${kpi}
 
 NOTES:
 - ${notes}
 `;
 
-    const yaml =
+  const yaml =
 `schema_version: "idea_forge.v1"
 kind: "opportunity_pack"
 id: "${id}"
 domain: "${domain}"
-goal_kpi: "${goal}"
-cheat_risk: "${cheat}"
-claim: "${claim.replaceAll('"','\\"')}"
-cheat_path: "${cheatPath.replaceAll('"','\\"')}"
+goal_kpi: "${kpi}"
+claim: "${String(claim).replaceAll('"','\\"')}"
+cheat_path: "${String(cheat).replaceAll('"','\\"')}"
 court_tests:
-${preset.witnesses.map(w => `  - id: "${w[0]}"
+${(m.witnesses||[]).map(w => `  - id: "${w[0]}"
     role: "${w[1]}"
     hardness: "${w[2]}"
-    pass_condition: "${w[3].replaceAll('"','\\"')}"
-    fail_condition: "${w[4].replaceAll('"','\\"')}"`).join("\n")}
-falsifier: "${falsifier.replaceAll('"','\\"')}"
+    pass_condition: "${String(w[3]).replaceAll('"','\\"')}"
+    fail_condition: "${String(w[4]).replaceAll('"','\\"')}"`).join("\n")}
+falsifier: "${String(falsifier).replaceAll('"','\\"')}"
 escape_hatch:
   trigger: "major_spike_and_one_witness_failed"
   required_escalations:
-${escape.map(x => `    - "${x.replaceAll('"','\\"')}"`).join("\n")}
-buyer: "${buyer.replaceAll('"','\\"')}"
-notes: "${notes.replaceAll('"','\\"')}"
+    - "independent rerun"
+    - "longer window"
+    - "stricter controls"
+buyer: "${String(buyer).replaceAll('"','\\"')}"
+notes: "${String(notes).replaceAll('"','\\"')}"
 `;
 
-    el("outIssue").textContent = issueBody;
-    el("outYaml").textContent = yaml;
+  el("outIssue").textContent = issueBody;
+  el("outYaml").textContent = yaml;
 
-    const title = `Opportunity Pack: ${domain.toUpperCase()} — ${goal}`;
-    el("openIssue").href = `${REPO_NEW_ISSUE_URL}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(issueBody)}`;
-  }
+  const title = `Opportunity Pack: ${domain.toUpperCase()} — ${m.title}`;
+  el("openIssue").href = `${REPO_NEW_ISSUE_URL}?title=${encodeURIComponent(title)}&body=${encodeURIComponent(issueBody)}`;
+  setXP(100);
+  el("stageTitle").textContent = "Step 2/2 · Artifact Ready";
+}
 
-  async function copyText(text){
-    try { await navigator.clipboard.writeText(text); }
-    catch(e){ alert("Copy failed. Select text manually and copy."); }
-  }
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); }
+  catch(e){ alert("Copy failed. Select text manually and copy."); }
+}
 
-  // stage nav
-  el("domain").addEventListener("change", refresh);
+el("toggleEdit").addEventListener("click", () => el("editBox").classList.toggle("hidden"));
+el("interest").addEventListener("change", () => { selected=null; setXP(0); renderMissions(); });
+el("generate").addEventListener("click", () => buildArtifact(!el("editBox").classList.contains("hidden")));
+el("copyIssue").addEventListener("click", () => copyText(el("outIssue").textContent));
+el("copyYaml").addEventListener("click", () => copyText(el("outYaml").textContent));
 
-  el("next1").addEventListener("click", () => {
-    if (!(el("claim").value || "").trim()) return alert("Write the one-sentence claim first.");
-    setXP(25); setBar(25); el("stageTitle").textContent = "Level 2/4 · Boss Fight: Cheat Path";
-    show("stage2");
-  });
-
-  el("back2").addEventListener("click", () => { setXP(0); setBar(0); el("stageTitle").textContent="Level 1/4 · The Claim"; show("stage1"); });
-
-  el("next2").addEventListener("click", () => {
-    if (!(el("cheatPath").value || "").trim()) return alert("Name the cheat path. That’s the whole point.");
-    setXP(50); setBar(50); el("stageTitle").textContent = "Level 3/4 · Build the Court";
-    show("stage3");
-  });
-
-  el("back3").addEventListener("click", () => { setXP(25); setBar(25); el("stageTitle").textContent="Level 2/4 · Boss Fight: Cheat Path"; show("stage2"); });
-
-  el("next3").addEventListener("click", () => {
-    if (!(el("buyer").value || "").trim()) return alert("Add the buyer. One sentence.");
-    setXP(75); setBar(75); el("stageTitle").textContent = "Level 4/4 · The Falsifier";
-    show("stage4");
-  });
-
-  el("back4").addEventListener("click", () => { setXP(50); setBar(50); el("stageTitle").textContent="Level 3/4 · Build the Court"; show("stage3"); });
-
-  el("finish").addEventListener("click", () => {
-    if (!(el("falsifier").value || "").trim()) return alert("Write the falsifier (cheapest kill switch).");
-    setXP(100); setBar(100); el("stageTitle").textContent = "Complete · Reward";
-    buildArtifact();
-    show("stage5");
-  });
-
-  el("copyIssue").addEventListener("click", () => copyText(el("outIssue").textContent));
-  el("copyYaml").addEventListener("click", () => copyText(el("outYaml").textContent));
-
-  refresh();
+renderInterests();
+renderMissions();
+setXP(0);
 </script>
 </body>
 </html>
