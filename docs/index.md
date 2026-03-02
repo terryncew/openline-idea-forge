@@ -1,162 +1,3 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Idea Forge</title>
-<style>
-:root{
-  --bg:#0b0c10; --panel:#101218; --line:rgba(255,255,255,.12);
-  --text:#e9eef7; --muted:#a8b3c7; --accent:#6ea8ff; --mint:#7cf0d2;
-  --good:#7CFF9B; --warn:#ffd166; --bad:#ff6b6b;
-  --shadow: 0 12px 30px rgba(0,0,0,.35);
-  --mono: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
-}
-@media (prefers-color-scheme: light){
-  :root{ --bg:#fbfcff; --panel:#ffffff; --line:rgba(15,20,40,.12);
-    --text:#0b1020; --muted:#3f4b66; --accent:#1f6feb; --mint:#00a884; --shadow:0 10px 30px rgba(10,20,40,.12);}
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;}
-.wrap{max-width:980px;margin:0 auto;padding:18px 14px 52px;}
-.hero{
-  border:1px solid var(--line); border-radius:18px; padding:18px;
-  background: linear-gradient(135deg, rgba(110,168,255,.18), rgba(124,240,210,.10));
-  box-shadow: var(--shadow);
-}
-h1{margin:0 0 6px;font-size:34px;letter-spacing:.2px}
-.lead{margin:0;color:var(--muted);line-height:1.45}
-.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-.pill{display:inline-block;padding:6px 10px;border:1px solid var(--line);border-radius:999px;font-size:12px;color:var(--muted);background:rgba(255,255,255,.04)}
-.grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
-@media(min-width:920px){.grid{grid-template-columns:1.1fr .9fr}}
-.card{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:14px}
-.card h2{margin:0 0 10px;font-size:16px}
-.bar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;border:1px solid var(--line)}
-.bar > div{height:100%;width:0%;background:linear-gradient(90deg, var(--accent), var(--mint))}
-.kpi{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px}
-.stageTitle{font-weight:900;letter-spacing:.2px}
-.small{font-size:12px;color:var(--muted);line-height:1.35}
-.tip{color:var(--muted);font-size:13px;line-height:1.4;margin-top:8px}
-.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-button,a.btn{
-  appearance:none;border-radius:12px;border:1px solid var(--line);
-  background:rgba(255,255,255,.04);color:var(--text);
-  padding:10px 12px;font-size:14px;cursor:pointer;text-decoration:none;display:inline-block;
-}
-button.primary{border-color:rgba(110,168,255,.40);background:linear-gradient(135deg, rgba(110,168,255,.34), rgba(124,240,210,.16));}
-hr{border:none;border-top:1px solid var(--line);margin:14px 0}
-.hidden{display:none}
-.cards{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
-@media(min-width:920px){.cards{grid-template-columns:1fr 1fr}}
-.choice{
-  border:1px solid var(--line); border-radius:14px; padding:12px; background:rgba(255,255,255,.03);
-  cursor:pointer;
-}
-.choice:hover{ border-color: rgba(110,168,255,.45); }
-.choice.sel{ outline: 2px solid rgba(110,168,255,.45); }
-.ctitle{font-weight:900;margin:0 0 6px}
-.cmeta{margin:0;color:var(--muted);font-size:13px;line-height:1.35}
-.mini{
-  font-family:var(--mono);font-size:12.5px;white-space:pre-wrap;overflow-wrap:anywhere;
-  border:1px solid var(--line);border-radius:16px;background:#0b0f1a;color:#d8e2ff;padding:12px;
-}
-@media (prefers-color-scheme: light){.mini{background:#0b1020;color:#e9eef7}}
-.badge{display:inline-block;padding:4px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px;color:var(--muted)}
-.good{color:var(--good);border-color:rgba(124,255,155,.45)}
-.warn{color:var(--warn);border-color:rgba(255,209,102,.55)}
-.scorebox{
-  border:1px solid var(--line); border-radius:14px; padding:12px; background:rgba(255,255,255,.03);
-}
-.scorebig{font-weight:900;font-size:28px;letter-spacing:.2px}
-.scoremeta{color:var(--muted);font-size:13px;line-height:1.35;margin-top:6px}
-</style>
-</head>
-<body>
-<div class="wrap">
-
-  <div class="hero">
-    <h1>Idea Forge</h1>
-    <p class="lead">A choose-your-adventure game for real problems: pick what you care about → get a test plan you can actually run → leave with a public record.</p>
-    <div class="row">
-      <span class="pill">No blank boxes</span>
-      <span class="pill">Fun, practical, not spooky</span>
-      <span class="pill">Ends with a real artifact</span>
-      <span class="pill">Gateway to receipts</span>
-    </div>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <div class="kpi">
-        <div class="stageTitle" id="stageTitle">Step 1/4 · What do you care about?</div>
-        <div class="small" id="progressText">Progress: 0%</div>
-      </div>
-      <div class="bar"><div id="barFill"></div></div>
-
-      <div id="step1" class="cards"></div>
-
-      <div id="step2wrap" class="hidden">
-        <hr/>
-        <div class="stageTitle">Step 2/4 · Pick a mission (solvable today)</div>
-        <div class="tip">These are framed so they can’t hide behind vibes. They either pass, escape, or fail.</div>
-        <div id="step2" class="cards"></div>
-      </div>
-
-      <div id="step3wrap" class="hidden">
-        <hr/>
-        <div class="stageTitle">Step 3/4 · Who are you doing this with?</div>
-        <div class="tip">Same mission, different help.</div>
-        <div id="step3" class="cards"></div>
-      </div>
-
-      <div id="step4wrap" class="hidden">
-        <hr/>
-        <div class="stageTitle">Step 4/4 · How big is your weekend?</div>
-        <div class="tip"><span class="badge warn">Rule:</span> bigger weekend = harder to fake.</div>
-        <div id="step4" class="cards"></div>
-
-        <div class="btnrow">
-          <button class="primary" id="generate">Generate your pack →</button>
-          <a class="btn" id="openIssueTop" target="_blank" rel="noopener">Open GitHub Issue</a>
-        </div>
-        <p class="small">If Issue link is disabled, hit Generate once.</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>What you get (and what it’s limited to)</h2>
-      <div class="scorebox">
-        <div class="scorebig" id="score">—</div>
-        <div class="scoremeta" id="scoremeta">Pick options on the left. You’ll see a rank + the limits.</div>
-      </div>
-
-      <hr/>
-
-      <h2>Your pack</h2>
-      <p class="tip">This is the “holy shit, this is real” artifact: claim + cheat path + court tests + falsifier + plan.</p>
-
-      <div class="btnrow">
-        <button id="copyIssue">Copy Issue Body</button>
-        <button id="copyYaml">Copy YAML</button>
-        <a class="btn primary" id="openIssue" target="_blank" rel="noopener">Open GitHub Issue</a>
-      </div>
-
-      <hr/>
-
-      <div class="small">Issue body</div>
-      <div class="mini" id="outIssue">(pick options → generate)</div>
-
-      <div style="height:10px"></div>
-
-      <div class="small">YAML</div>
-      <div class="mini" id="outYaml">(pick options → generate)</div>
-
-      <p class="small"><b>Receipts, in normal language:</b> a record you can’t quietly rewrite. Less “trust us,” more “show it.”</p>
-    </div>
-  </div>
-</div>
-
 <script>
 const REPO_NEW_ISSUE_URL = "https://github.com/terryncew/openline-idea-forge/issues/new";
 
@@ -369,11 +210,14 @@ function renderStep1(){
       sel.theme = t; sel.mission=null; sel.crew=null; sel.weekend=null;
       document.querySelectorAll("#step1 .choice").forEach(x => x.classList.remove("sel"));
       d.classList.add("sel");
-      el("step2wrap").classList.remove("hidden");
-      renderStep2();
+      
+      // FIX: Hide downstream steps and update progress BEFORE rendering Step 2
       el("step3wrap").classList.add("hidden");
       el("step4wrap").classList.add("hidden");
       setProgress(25);
+
+      el("step2wrap").classList.remove("hidden");
+      renderStep2();
       updateScorePanel();
     };
     box.appendChild(d);
@@ -389,10 +233,13 @@ function renderStep2(){
       sel.mission = m; sel.crew=null; sel.weekend=null;
       document.querySelectorAll("#step2 .choice").forEach(x => x.classList.remove("sel"));
       d.classList.add("sel");
-      el("step3wrap").classList.remove("hidden");
-      renderStep3();
+      
+      // FIX: Hide downstream steps and update progress BEFORE rendering Step 3
       el("step4wrap").classList.add("hidden");
       setProgress(50);
+
+      el("step3wrap").classList.remove("hidden");
+      renderStep3();
       updateScorePanel();
     };
     box.appendChild(d);
@@ -408,9 +255,11 @@ function renderStep3(){
       sel.crew = c; sel.weekend=null;
       document.querySelectorAll("#step3 .choice").forEach(x => x.classList.remove("sel"));
       d.classList.add("sel");
+      
+      setProgress(75);
+
       el("step4wrap").classList.remove("hidden");
       renderStep4();
-      setProgress(75);
       updateScorePanel();
     };
     box.appendChild(d);
@@ -553,9 +402,7 @@ el("generate").addEventListener("click", buildArtifact);
 el("copyIssue").addEventListener("click", () => copyText(el("outIssue").textContent));
 el("copyYaml").addEventListener("click", () => copyText(el("outYaml").textContent));
 
-renderStep1();
+// FIX: Set progress to 0 before starting the click cascade, so it doesn't instantly overwrite your 90% progress bar.
 setProgress(0);
-updateScorePanel();
+renderStep1();
 </script>
-</body>
-</html>
