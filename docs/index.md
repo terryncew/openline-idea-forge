@@ -5,12 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Idea Forge · OpenLine</title>
 
-  <!-- Share preview (add og.png at /og.png) -->
+  <!-- Share preview (optional). Add /docs/og.png if you want a nice card. -->
   <meta property="og:title" content="Idea Forge · OpenLine"/>
   <meta property="og:description" content="Turn a weird thought into a testable plan. No logins. Leave with a GitHub Issue + YAML pack."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://terryncew.github.io/openline-idea-forge/"/>
-  <meta property="og:image" content="https://terryncew.github.io/openline-idea-forge/og.png"/>
+  <meta property="og:image" content="og.png"/>
   <meta name="twitter:card" content="summary_large_image"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -25,11 +24,8 @@
       --panel:#0c1120;
 
       --border:rgba(56,189,248,.12);
-      --border2:rgba(0,255,136,.14);
-
       --text:#d8e4f8;
       --muted:#8aa0c8;
-      --dim:#1e2a44;
 
       --green:#00ff88;
       --blue:#38bdf8;
@@ -38,8 +34,6 @@
       --red:#f87171;
 
       --glow-g:0 0 24px rgba(0,255,136,.22);
-      --glow-b:0 0 24px rgba(56,189,248,.18);
-      --glow-v:0 0 24px rgba(129,140,248,.18);
 
       --radius:14px;
       --mono:"JetBrains Mono",ui-monospace,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
@@ -71,7 +65,7 @@
 
     .header{
       display:flex;align-items:flex-start;justify-content:space-between;
-      gap:18px;margin-bottom:18px;
+      gap:18px;margin-bottom:14px;
     }
     .logo{display:flex;align-items:center;gap:10px;margin-bottom:8px}
     .logo-mark{
@@ -113,7 +107,6 @@
       50%{opacity:.7;box-shadow:0 0 0 6px rgba(0,255,136,0)}
     }
 
-    /* NEW: instant actions */
     .top-actions{
       display:flex;gap:10px;flex-wrap:wrap;align-items:center;
       margin:2px 0 16px;
@@ -240,7 +233,7 @@
       border-radius:8px;border:1px solid rgba(248,113,113,.18);
     }
 
-    /* NEW: cheat risk legend + guide */
+    /* Cheat risk explainer */
     #riskLegend{
       border:1px solid var(--border);
       background:rgba(255,255,255,.02);
@@ -361,8 +354,6 @@
       color:#a8c0e8;line-height:1.7;white-space:pre-wrap;
       overflow-wrap:anywhere;max-height:320px;overflow-y:auto;
     }
-    .output-box .k{color:#7dd3fc}
-    .output-box .v{color:#a7f3d0}
 
     .byoa{
       margin-top:12px;
@@ -397,7 +388,6 @@
     </div>
   </div>
 
-  <!-- NEW: instant conversion for drive-by traffic -->
   <div class="top-actions">
     <button class="btn primary" id="quickGen">Generate sample pack</button>
     <button class="btn ghost" id="quickCopy" disabled>Copy Issue body</button>
@@ -431,7 +421,6 @@
           <div class="step-title">Pick a project</div>
           <div class="step-desc">Each mission includes: a claim, the common shortcut, court tests, and a cheap falsifier.</div>
 
-          <!-- NEW: explain cheat risk in plain language + tell them what to do -->
           <div id="riskLegend">
             <div class="t">What “cheat_risk” means</div>
             <div class="p">
@@ -441,7 +430,7 @@
             <div class="row">
               <div class="chip"><b style="color:var(--green)">LOW</b> — hard to fake. Basic checks usually catch it.</div>
               <div class="chip"><b style="color:var(--amber)">MED</b> — some controls needed. Replicate + watch decay.</div>
-              <div class="chip"><b style="color:var(--red)">HIGH</b> — easy to fake. Require strict controls + outside verification.</div>
+              <div class="chip"><b style="color:var(--red)">HIGH</b> — easy to fake. Strict controls + outside verification.</div>
             </div>
             <div id="riskGuide">
               <div class="h">How to use this</div>
@@ -557,10 +546,10 @@
   const REPO_NEW_ISSUE = "https://github.com/terryncew/openline-idea-forge/issues/new";
 
   const TOPICS = [
-    { key:"ai-governance", icon:"🧠", title:"AI governance", meta:"Stop runaway behavior. Make drift visible.", color:"blue" },
-    { key:"climate", icon:"🌱", title:"Climate & carbon", meta:"Carbon accounting, stability, durability.", color:"green" },
-    { key:"cost", icon:"⚡", title:"Cost & productivity", meta:"Reduce waste. Shorten time-to-results.", color:"amber" },
-    { key:"privacy", icon:"🔒", title:"Privacy & freedom", meta:"Proof without surveillance.", color:"violet" }
+    { key:"ai-governance", icon:"🧠", title:"AI governance", meta:"Stop runaway behavior. Make drift visible." },
+    { key:"climate", icon:"🌱", title:"Climate & carbon", meta:"Carbon accounting, stability, durability." },
+    { key:"cost", icon:"⚡", title:"Cost & productivity", meta:"Reduce waste. Shorten time-to-results." },
+    { key:"privacy", icon:"🔒", title:"Privacy & freedom", meta:"Proof without surveillance." }
   ];
 
   const PROJECTS = {
@@ -685,10 +674,10 @@
   };
 
   const SETUPS = [
-    { key:"solo", icon:"👤", title:"Solo", meta:"You run the test alone.", note:"Do the cheapest falsifier test first. If it survives, recruit help.", score:4 },
-    { key:"team", icon:"👥", title:"Small team", meta:"2–5 people split builder / skeptic / recorder.", note:"Assign one person specifically to disprove the claim.", score:9 },
-    { key:"agents", icon:"🤖", title:"AI-assisted", meta:"Use Claude/GPT for research + drafting.", note:"Agents can gather evidence; the falsifier is still the judge.", score:11 },
-    { key:"lab", icon:"🔬", title:"Lab/org", meta:"You have real instrumentation.", note:"Higher signal but slower loops. Match tests to instrument precision.", score:14 }
+    { key:"solo", icon:"👤", title:"Solo", meta:"You run the test alone.", note:"Do the cheapest falsifier test first.", score:4 },
+    { key:"team", icon:"👥", title:"Small team", meta:"2–5 people split builder / skeptic / recorder.", note:"Assign one person to disprove the claim.", score:9 },
+    { key:"agents", icon:"🤖", title:"AI-assisted", meta:"Use Claude/GPT for research + drafting.", note:"Falsifier is still the judge.", score:11 },
+    { key:"lab", icon:"🔬", title:"Lab/org", meta:"You have real instrumentation.", note:"Higher signal but slower loops.", score:14 }
   ];
 
   const WINDOWS = [
@@ -812,7 +801,7 @@
     });
   }
 
-  // NEW: cheat risk now PENALIZES score (old code rewarded high cheat risk)
+  // cheat risk penalizes score (high cheat risk => harder to prove cleanly)
   function computeScore(p){
     if (!p) return 0;
     const base = 55;
@@ -825,10 +814,9 @@
 
   function riskGuideText(p){
     if (!p) return "Pick a project to see the recommended proof discipline.";
-    const r = p.cheat_risk;
-    if (r === "high") return "HIGH: Assume it can fake a win. Do strict controls first, then independent verification. If controls fail, stop.";
-    if (r === "medium") return "MED: Do controls + a replicate. Watch for decay/side-effects. If replicate fails, stop.";
-    return "LOW: Still test it, but basic controls usually catch failure. Run the cheap falsifier first, then scale time window.";
+    if (p.cheat_risk === "high") return "HIGH: assume it can fake a win. Run strict controls first + require independent verification.";
+    if (p.cheat_risk === "medium") return "MED: do controls + a replicate. Watch for decay/side-effects. If replicate fails, stop.";
+    return "LOW: basic controls usually catch failure. Run the cheap falsifier first, then extend time window.";
   }
 
   function updatePreview(){
@@ -888,11 +876,9 @@
     $("toolSchema").textContent = JSON.stringify(tool, null, 2);
   }
 
-  // NEW: safer YAML (block scalars for text fields)
+  // safer YAML: use block scalars for text-heavy fields
   function escYamlQuoted(s){
-    return String(s||"")
-      .replaceAll("\\", "\\\\")
-      .replaceAll('"', '\\"');
+    return String(s||"").replaceAll("\\", "\\\\").replaceAll('"', '\\"');
   }
   function yamlBlock(key, value, indent=""){
     const lines = String(value ?? "").split("\n");
@@ -911,7 +897,6 @@
     const witnessLines = (p.witnesses||[]).map(w =>
       `- ${w[0]} (${w[1]}, ${w[2]}): PASS if ${w[3]}. FAIL if ${w[4]}.`
     ).join("\n");
-
     const limitLines = (p.limits||[]).map(x => `- ${x}`).join("\n");
 
     state.issueBody =
@@ -923,11 +908,7 @@ RANKING:
 - testability_score: ${score}/100
 - setup: ${setup.key}
 - time_window: ${win.key}
-
-CHEAT RISK (what it means):
-- low: hard to fake a win
-- medium: needs controls + replicate
-- high: easy to fake — require strict controls + outside verification
+- cheat_risk: ${p.cheat_risk}  (how easy it is to fake a win)
 
 LIMITS:
 ${limitLines}
@@ -997,7 +978,6 @@ receipt_family: "openline.science.v1"
 
     renderOutput();
 
-    // NEW: avoid URL-length failures — open blank issue with title only
     const title = `Opportunity Pack: ${p.domain.toUpperCase()} — ${p.title}`;
     state.ghUrl = `${REPO_NEW_ISSUE}?title=${encodeURIComponent(title)}`;
     const link = $("ghLink");
@@ -1006,9 +986,7 @@ receipt_family: "openline.science.v1"
     link.style.opacity = "1";
     link.style.pointerEvents = "auto";
 
-    // enable quick copy
     $("quickCopy").disabled = false;
-
     goStep(3);
   }
 
@@ -1074,7 +1052,6 @@ receipt_family: "openline.science.v1"
   $("tabYaml").onclick = ()=>switchTab("yaml");
   $("copyBtn").onclick = doCopy;
 
-  // NEW: top actions
   $("quickGen").onclick = quickGenerate;
   $("quickCopy").onclick = doQuickCopyIssue;
 
