@@ -3,708 +3,781 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Idea Forge · OpenLine</title>
+  <title>OpenLine Exchange · Demo</title>
 
-  <meta property="og:title" content="Idea Forge · OpenLine"/>
-  <meta property="og:description" content="Turn a weird thought into a testable plan. No logins. Leave with a GitHub Issue + YAML pack."/>
+  <meta property="og:title" content="OpenLine Exchange · Demo"/>
+  <meta property="og:description" content="Find your pack. Register a falsifier. Run the witnesses. Emit a receipt."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://terryncew.github.io/openline-idea-forge/"/>
-  <meta property="og:image" content="https://terryncew.github.io/openline-idea-forge/og.png"/>
   <meta name="twitter:card" content="summary_large_image"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 
   <style>
-    *,::before,::after{box-sizing:border-box;margin:0;padding:0}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root{
-      --bg:#050912; --surface:#090e1c; --panel:#0c1120;
-      --border:rgba(56,189,248,.12);
-      --text:#d8e4f8; --muted:#8aa0c8;
-      --green:#00ff88; --blue:#38bdf8; --violet:#818cf8; --amber:#fbbf24; --red:#f87171;
-      --glow-g:0 0 24px rgba(0,255,136,.22);
-      --radius:14px;
-      --mono:"JetBrains Mono",ui-monospace,Menlo,Monaco,Consolas,"Liberation Mono",monospace;
-      --display:"Syne",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      --bg:#060809; --bg1:#0b0e11; --bg2:#111519; --bg3:#171c21;
+      --border:rgba(0,255,136,.08); --border2:rgba(0,255,136,.2);
+      --text:#c8d8c0; --dim:#3a4a3a; --mid:#6a8a6a;
+      --green:#00ff88; --green2:rgba(0,255,136,.12);
+      --amber:#f5a623; --red:#ff4d6a; --blue:#38d9f0;
+      --mono:'JetBrains Mono', monospace;
+      --display:'Barlow Condensed', sans-serif;
+      --body:'DM Sans', sans-serif;
     }
     html{scroll-behavior:smooth}
-    body{background:var(--bg);color:var(--text);font-family:var(--display);min-height:100vh;overflow-x:hidden}
-    body::before{
-      content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
-      background-image:
-        radial-gradient(ellipse 70% 60% at 20% 10%, rgba(0,255,136,.06) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(56,189,248,.05) 0%, transparent 60%),
-        linear-gradient(rgba(56,189,248,.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(56,189,248,.04) 1px, transparent 1px);
-      background-size:100% 100%,100% 100%,48px 48px,48px 48px;
-    }
-    .root{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:22px 18px 56px}
-    .header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:14px}
-    .logo{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-    .logo-mark{
-      width:36px;height:36px;border-radius:9px;
-      background:linear-gradient(135deg,var(--green),var(--blue));
-      display:flex;align-items:center;justify-content:center;
-      font-family:var(--mono);font-weight:800;font-size:13px;color:#050912;flex-shrink:0;
-    }
-    .logo-text{font-size:22px;font-weight:800;letter-spacing:-0.03em}
-    .logo-badge{
-      font-family:var(--mono);font-size:10px;color:var(--muted);
-      border:1px solid var(--border);border-radius:999px;
-      padding:3px 9px;margin-left:6px;background:rgba(255,255,255,.03);
-    }
-    .tagline{color:var(--muted);font-size:13.5px;max-width:560px;line-height:1.6}
-    .tagline b{color:var(--text)} .tagline em{color:var(--green);font-style:normal}
-    .header-stats{display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
-    .stat-pill{
-      font-family:var(--mono);font-size:11px;border:1px solid var(--border);border-radius:999px;
-      padding:6px 12px;color:var(--muted);display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);
-    }
-    .stat-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
-    @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,255,136,.35)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(0,255,136,0)}}
+    body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--body);overflow-x:hidden}
+    a{color:inherit}
+    ::-webkit-scrollbar{width:3px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:rgba(0,255,136,.15);border-radius:99px}
 
-    .top-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:2px 0 16px}
-    .steps-track{
-      display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:999px;padding:4px;
-      background:var(--surface);width:fit-content;margin:14px 0 18px;
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(0,255,136,0)}50%{box-shadow:0 0 20px 4px rgba(0,255,136,.15)}}
+
+    .wrap{min-height:100vh}
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:11px 22px;border-bottom:1px solid var(--border);
+      background:rgba(6,8,9,.95);backdrop-filter:blur(16px);
+      position:sticky;top:0;z-index:50;
     }
-    .step-pill{
-      display:flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;
-      transition:all .2s ease;color:var(--muted);user-select:none;white-space:nowrap;
+    .brand{display:flex;align-items:center;gap:8px}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+    .brand span{
+      font-family:var(--display);font-size:18px;font-weight:900;letter-spacing:.06em
     }
-    .step-pill .snum{
-      font-family:var(--mono);font-size:10px;width:18px;height:18px;border-radius:50%;border:1px solid currentColor;
-      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    .crumb{
+      font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.1em;
+      text-transform:uppercase;
     }
-    .step-pill.active{background:linear-gradient(135deg,rgba(0,255,136,.18),rgba(56,189,248,.10));color:var(--green);border:1px solid rgba(0,255,136,.35)}
-    .step-pill.done{color:var(--blue)} .step-pill.done .snum{border-color:var(--blue)}
 
-    .main{display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:start}
-    @media(max-width:920px){.main{grid-template-columns:1fr}}
-
-    .wizard, .preview-dock{border:1px solid var(--border);border-radius:var(--radius);background:var(--panel);overflow:hidden}
-    .wizard-inner{padding:20px}
-    .dock-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-    .dock-title{font-size:13px;font-weight:800;color:var(--muted)}
-    .dock-body{padding:16px}
-
-    .step-content{display:none;animation:stepIn .25s ease}
-    .step-content.active{display:block}
-    @keyframes stepIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
-    .section-label{
-      font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;
-      margin-bottom:12px;display:flex;align-items:center;gap:8px;
+    .ticker{
+      overflow:hidden;border-bottom:1px solid var(--border);
+      background:rgba(0,255,136,.03);padding:5px 0;
     }
-    .section-label::after{content:"";flex:1;height:1px;background:var(--border)}
-    .step-title{font-size:20px;font-weight:800;margin-bottom:6px}
-    .step-desc{color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:14px}
-
-    .sel-grid{display:grid;gap:10px}
-    .sel-grid.cols2{grid-template-columns:1fr 1fr}
-    @media(max-width:700px){.sel-grid.cols2{grid-template-columns:1fr}}
-
-    .sel-card{
-      border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.02);
-      padding:14px;cursor:pointer;transition:all .18s ease;position:relative;overflow:hidden;
+    .tickerTrack{
+      display:inline-flex;white-space:nowrap;
+      animation:ticker 25s linear infinite;
     }
-    .sel-card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,255,136,.06),rgba(56,189,248,.04));opacity:0;transition:opacity .18s}
-    .sel-card:hover{border-color:rgba(0,255,136,.25);transform:translateY(-1px)} .sel-card:hover::before{opacity:1}
-    .sel-card.sel{border-color:rgba(0,255,136,.55);background:rgba(0,255,136,.06);box-shadow:var(--glow-g)}
-    .sel-card.sel::before{opacity:1}
-    .sel-card .check{
-      position:absolute;top:10px;right:10px;width:18px;height:18px;border-radius:50%;
-      background:var(--green);color:#050912;display:flex;align-items:center;justify-content:center;font-size:10px;
-      opacity:0;transition:opacity .18s;font-family:var(--mono);font-weight:900;
+    .tick{
+      display:inline-flex;align-items:center;gap:8px;margin-right:40px;
+      font-family:var(--mono);font-size:9px;color:var(--mid);
     }
-    .sel-card.sel .check{opacity:1}
-    .card-icon{font-size:22px;margin-bottom:8px;line-height:1}
-    .card-title{font-size:14px;font-weight:800;margin-bottom:4px}
-    .card-meta{font-size:12px;color:var(--muted);line-height:1.5}
-
-    .card-badge{
-      display:inline-block;margin-top:8px;font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:999px;
-      border:1px solid var(--border);color:var(--muted);
+    .tick strong{color:var(--text);font-weight:600}
+    .pill{
+      padding:2px 8px;border-radius:4px;font-size:8px;font-weight:700;
+      letter-spacing:.07em;border:1px solid rgba(255,255,255,.05);
+      background:rgba(255,255,255,.03);color:var(--dim);
     }
-    .card-badge.high{color:var(--red);border-color:rgba(248,113,113,.35);background:rgba(248,113,113,.06)}
-    .card-badge.medium{color:var(--amber);border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.06)}
-    .card-badge.low{color:var(--green);border-color:rgba(0,255,136,.35);background:rgba(0,255,136,.06)}
 
-    .proj-claim{font-size:11.5px;color:var(--text);line-height:1.5;border-left:2px solid var(--green);padding-left:9px;margin-top:10px}
-    .proj-fail{font-family:var(--mono);font-size:10.5px;color:var(--red);margin-top:8px;padding:6px 9px;background:rgba(248,113,113,.06);border-radius:8px;border:1px solid rgba(248,113,113,.18)}
+    .container{max-width:860px;margin:0 auto;padding:0 20px 60px}
+    .fu{animation:fadeUp .45s ease both}
+    .fu1{animation:fadeUp .45s ease .1s both}
+    .fu2{animation:fadeUp .45s ease .2s both}
+    .fu3{animation:fadeUp .45s ease .3s both}
+    .fu4{animation:fadeUp .45s ease .4s both}
 
-    #riskLegend{border:1px solid var(--border);background:rgba(255,255,255,.02);border-radius:12px;padding:12px;margin:12px 0 14px}
-    #riskLegend .t{font-weight:900;font-size:13px;margin-bottom:6px}
-    #riskLegend .p{color:var(--muted);font-size:12px;line-height:1.55;margin-bottom:10px}
-    #riskLegend .row{display:flex;gap:8px;flex-wrap:wrap}
-    #riskLegend .chip{font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--muted)}
-    #riskLegend .chip b{color:var(--text);font-family:var(--display);font-weight:900}
-    #riskGuide{margin-top:10px;border-left:2px solid var(--blue);background:rgba(56,189,248,.06);border-radius:0 10px 10px 0;padding:10px 12px}
-    #riskGuide .h{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
-    #riskGuide .c{font-size:12px;line-height:1.55;color:var(--text)}
+    .progress{display:flex;gap:4px;margin:24px 0 0}
+    .bar{height:3px;border-radius:99px;background:var(--bg3);transition:all .4s ease}
 
-    .nav-row{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);gap:10px;flex-wrap:wrap}
+    .card{
+      background:var(--bg1);
+      border:1px solid var(--border);
+      border-radius:12px;
+    }
+
     .btn{
-      display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:10px;
-      font-family:var(--display);font-size:13px;font-weight:800;cursor:pointer;border:1px solid var(--border);
-      background:rgba(255,255,255,.04);color:var(--text);transition:all .18s;text-decoration:none;user-select:none;
+      border:none;cursor:pointer;border-radius:10px;
+      font-family:var(--display);font-weight:900;letter-spacing:.04em;
+      transition:all .15s;
     }
-    .btn:hover{border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.07)}
-    .btn.primary{border-color:rgba(0,255,136,.40);background:linear-gradient(135deg,rgba(0,255,136,.18),rgba(56,189,248,.10));color:var(--green)}
-    .btn.primary:hover{border-color:rgba(0,255,136,.65);box-shadow:var(--glow-g)}
-    .btn.ghost{background:transparent;color:var(--muted)} .btn.ghost:hover{color:var(--text)}
-    .btn.sm{padding:7px 12px;font-size:12px;font-weight:800}
-    .btn:disabled{opacity:.35;pointer-events:none}
+    .btnPrimary{
+      background:var(--green);color:#060809;
+      box-shadow:0 0 32px rgba(0,255,136,.3);
+    }
+    .btnPrimary:hover{transform:translateY(-1px)}
+    .btnAlt{
+      border:1px solid var(--amber);background:rgba(245,166,35,.08);
+      color:var(--amber);
+    }
+    .btnGhost{
+      border:1px solid var(--border);background:transparent;color:var(--mid);
+    }
+    .btnGhost:hover{border-color:rgba(0,255,136,.22);color:var(--text)}
+    .btn[disabled]{opacity:.35;cursor:default}
 
-    .score-ring-wrap{display:flex;align-items:center;gap:14px;margin-bottom:14px}
-    .score-ring-svg{flex-shrink:0;filter:drop-shadow(0 0 12px rgba(0,255,136,.18))}
-    .score-ring-track{fill:none;stroke:rgba(255,255,255,.06);stroke-width:7}
-    .score-ring-fill{fill:none;stroke:url(#ringGrad);stroke-width:7;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset .5s cubic-bezier(.4,0,.2,1)}
-    .score-number{font-size:28px;font-weight:900;font-family:var(--mono)}
-    .score-label{font-size:11px;color:var(--muted);margin-top:2px}
-    .score-verdict{font-size:12px;font-weight:800;margin-top:6px;line-height:1.4}
-    hr.fancy{border:none;border-top:1px solid var(--border);margin:14px 0}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media(max-width:760px){.grid3{grid-template-columns:1fr}}
+    .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+    .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+    @media(max-width:760px){.grid4{grid-template-columns:repeat(2,1fr)}}
 
-    .block{border-left:2px solid var(--green);padding:10px 12px;background:rgba(0,255,136,.04);border-radius:0 10px 10px 0;margin-bottom:10px}
-    .block .label{font-family:var(--mono);font-size:9px;color:var(--green);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
-    .block .text{font-size:12px;line-height:1.55;color:var(--text)}
-    .block.fail{border-left-color:var(--red);background:rgba(248,113,113,.04)}
-    .block.fail .label{color:var(--red)} .block.fail .text{font-family:var(--mono);font-size:11px}
+    .chip{
+      padding:12px 10px;border-radius:10px;cursor:pointer;text-align:center;
+      border:1px solid var(--border);background:var(--bg1);transition:all .15s;
+      user-select:none;
+    }
+    .chip:hover{transform:translateY(-1px);border-color:rgba(0,255,136,.22)}
+    .chip.sel{border-color:var(--green);background:rgba(0,255,136,.07)}
+    .chip .label{font-size:11px;font-weight:600;color:var(--text)}
+    .chip.sel .label{color:var(--green)}
+    .chip .sub{font-family:var(--mono);font-size:8px;color:var(--dim);margin-top:2px}
 
-    .witnesses-label{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin:10px 0 8px}
-    .witness-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
-    .witness-item:last-child{border-bottom:none}
-    .w-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:3px}
-    .w-dot.hard{background:var(--red);box-shadow:0 0 6px rgba(248,113,113,.45)}
-    .w-dot.soft{background:var(--amber);box-shadow:0 0 6px rgba(251,191,36,.35)}
-    .w-id{font-family:var(--mono);font-size:10px;color:var(--muted);flex-shrink:0;width:92px;padding-top:1px}
-    .w-text{font-size:11px;color:var(--text);line-height:1.45}
-    .w-fail{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px;line-height:1.35}
+    .rowCard{
+      padding:14px 16px;border-radius:10px;cursor:pointer;
+      border:1px solid var(--border);background:var(--bg1);
+      display:flex;align-items:center;gap:12px;transition:all .15s;
+    }
+    .rowCard:hover{transform:translateY(-1px);border-color:rgba(0,255,136,.22)}
+    .rowCard.sel{border-color:rgba(245,166,35,.5);background:rgba(245,166,35,.07)}
+    .rowCard .title{font-size:13px;font-weight:600}
+    .rowCard .sub{font-family:var(--mono);font-size:9px;color:var(--dim)}
 
-    .tabs{display:flex;gap:2px;margin-bottom:10px;padding:4px;background:var(--surface);border-radius:10px}
-    .tab{flex:1;padding:7px;border-radius:8px;font-family:var(--mono);font-size:11px;cursor:pointer;border:none;background:none;color:var(--muted);transition:all .18s}
-    .tab.active{background:var(--panel);color:var(--text)}
-
-    .copy-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-    .output-box{
-      background:#030509;border:1px solid var(--border);border-radius:10px;
-      padding:12px;font-family:var(--mono);font-size:11px;color:#a8c0e8;line-height:1.7;white-space:pre-wrap;
-      overflow-wrap:anywhere;max-height:320px;overflow-y:auto;
+    .muted{font-family:var(--mono);font-size:11px;color:var(--mid)}
+    .kicker{font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:.14em}
+    .title{font-family:var(--display);font-weight:900;letter-spacing:-.01em}
+    .hr{height:1px;background:rgba(255,255,255,.04)}
+    .spin{
+      width:64px;height:64px;border:2px solid var(--border);
+      border-top-color:var(--green);border-radius:50%;
+      animation:spin 1s linear infinite;margin:0 auto 28px;
+    }
+    .miniSteps{display:flex;flex-direction:column;gap:6px;text-align:left}
+    .miniStep{display:flex;align-items:center;gap:10px}
+    .miniDot{
+      width:14px;height:14px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-size:8px;color:#060809;flex-shrink:0
     }
 
-    .byoa{margin-top:12px;border:1px solid rgba(129,140,248,.25);background:rgba(129,140,248,.04);border-radius:12px;padding:12px}
-    .byoa h3{font-size:13px;font-weight:900;margin-bottom:8px;color:var(--text)}
-    .byoa p{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:10px}
-    .byoa .mini{font-family:var(--mono);font-size:11px;color:#a8c0e8;white-space:pre-wrap;overflow-wrap:anywhere}
+    .packBanner{
+      border:1px solid var(--border2);
+      border-left:4px solid var(--green);
+      border-radius:14px;padding:20px 24px;background:var(--bg1);
+    }
+    .tag{
+      font-family:var(--mono);font-size:9px;color:var(--green);
+      background:rgba(0,255,136,.1);padding:3px 8px;border-radius:4px;
+      letter-spacing:.1em
+    }
+    .scoreBig{font-family:var(--display);font-weight:900;font-size:52px;line-height:1}
+    .meterRow{display:flex;align-items:center;gap:6px}
+    .meterLab{font-family:var(--mono);font-size:7px;color:var(--dim);width:80px;letter-spacing:.07em}
+    .meterBar{flex:1;height:3px;background:rgba(255,255,255,.05);border-radius:99px}
+    .meterFill{height:100%;border-radius:99px;transition:width 1s}
+
+    .claimBox{border:1px solid var(--border);border-radius:10px;padding:14px 16px;background:var(--bg1)}
+    .claimBox .h{font-family:var(--mono);font-size:8px;letter-spacing:.12em;color:var(--green);margin-bottom:5px}
+    .failBox{border:1px solid rgba(255,77,106,.15);border-radius:10px;padding:14px 16px;background:rgba(255,77,106,.04)}
+    .failBox .h{font-family:var(--mono);font-size:8px;letter-spacing:.12em;color:var(--red);margin-bottom:5px}
+    .failBox .t{font-family:var(--mono);font-size:11px;color:#fca5a5;line-height:1.65}
+
+    .stakeBtns{display:flex;gap:6px}
+    .stakeBtn{
+      flex:1;padding:8px 0;border-radius:7px;border:none;cursor:pointer;
+      font-family:var(--display);font-weight:900;font-size:14px;transition:all .15s
+    }
+
+    .monoSmall{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.08em}
+    .legal{font-family:var(--mono);font-size:9px;color:var(--dim);text-align:center}
+    .copyRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .out{
+      margin-top:10px;
+      background:#050707;border:1px solid rgba(0,255,136,.12);
+      border-radius:12px;padding:12px;
+      font-family:var(--mono);font-size:10px;color:#a8c0a8;white-space:pre-wrap;overflow-wrap:anywhere;
+      max-height:260px;overflow:auto;
+    }
   </style>
 </head>
 
 <body>
-<div class="root">
-  <div class="header">
-    <div>
-      <div class="logo">
-        <div class="logo-mark">IF</div>
-        <div class="logo-text">Idea Forge <span class="logo-badge">openline.science.v1</span></div>
-      </div>
-      <div class="tagline">
-        A tiny, free “choose-your-own-adventure” for turning a <b>weird thought</b> into a <em>testable</em> plan.
-        No logins. No keys. You leave with a GitHub Issue + YAML pack.
-      </div>
+<div class="wrap">
+  <div class="nav">
+    <div class="brand">
+      <div class="dot"></div>
+      <span>OPENLINE EXCHANGE</span>
     </div>
-    <div class="header-stats">
-      <div class="stat-pill"><span class="dot"></span> free starter kit</div>
-      <div class="stat-pill">default: Agents</div>
-      <div class="stat-pill">output: Issue + YAML</div>
-    </div>
+    <div class="crumb" id="crumb">LIVE MARKET</div>
   </div>
 
-  <div class="top-actions">
-    <button class="btn primary" id="quickGen">Generate sample pack</button>
-    <button class="btn ghost" id="quickCopy" disabled>Copy Issue body</button>
-    <a class="btn ghost" href="https://github.com/terryncew/openline-idea-forge/issues/new" target="_blank" rel="noopener">Open blank Issue</a>
+  <div class="ticker" aria-hidden="true">
+    <div class="tickerTrack" id="tickerTrack"></div>
   </div>
 
-  <div class="steps-track" id="stepTrack">
-    <div class="step-pill active" data-step="0"><span class="snum">1</span> Topic</div>
-    <div class="step-pill" data-step="1"><span class="snum">2</span> Project</div>
-    <div class="step-pill" data-step="2"><span class="snum">3</span> Setup</div>
-    <div class="step-pill" data-step="3"><span class="snum">4</span> Generate</div>
-  </div>
-
-  <div class="main">
-    <div class="wizard">
-      <div class="wizard-inner">
-
-        <div class="step-content active" data-step="0">
-          <div class="section-label">Step 1 of 4</div>
-          <div class="step-title">Pick a topic</div>
-          <div class="step-desc">No blanks. Pick what you care about. The missions are pre-filled and solvable.</div>
-          <div class="sel-grid cols2" id="topicsGrid"></div>
-          <div class="nav-row">
-            <div></div>
-            <button class="btn primary" id="to1">Continue</button>
-          </div>
-        </div>
-
-        <div class="step-content" data-step="1">
-          <div class="section-label">Step 2 of 4</div>
-          <div class="step-title">Pick a project</div>
-          <div class="step-desc">Each mission includes: a claim, the common shortcut, court tests, and a cheap falsifier.</div>
-
-          <div id="riskLegend">
-            <div class="t">What “cheat_risk” means</div>
-            <div class="p">
-              Cheat risk = how easy it is to get a “win” that isn’t real.
-              High risk means the system can look successful while secretly taking an easier path.
-            </div>
-            <div class="row">
-              <div class="chip"><b style="color:var(--green)">LOW</b> — hard to fake. Basic checks usually catch it.</div>
-              <div class="chip"><b style="color:var(--amber)">MED</b> — some controls needed. Replicate + watch decay.</div>
-              <div class="chip"><b style="color:var(--red)">HIGH</b> — easy to fake. Strict controls + outside verification.</div>
-            </div>
-            <div id="riskGuide">
-              <div class="h">How to use this</div>
-              <div class="c" id="riskGuideText">Pick a project to see the recommended proof discipline.</div>
-            </div>
-          </div>
-
-          <div class="sel-grid" id="projectsGrid"></div>
-          <div class="nav-row">
-            <button class="btn ghost" id="back0">Back</button>
-            <button class="btn primary" id="to2">Continue</button>
-          </div>
-        </div>
-
-        <div class="step-content" data-step="2">
-          <div class="section-label">Step 3 of 4</div>
-          <div class="step-title">Pick your setup</div>
-          <div class="step-desc">This only changes the minimum plan and the score. The mission stays the same.</div>
-
-          <div class="section-label" style="margin-top:14px">Who is running it?</div>
-          <div class="sel-grid cols2" id="setupsGrid"></div>
-
-          <div class="section-label" style="margin-top:16px">Time window</div>
-          <div class="sel-grid cols2" id="windowsGrid"></div>
-
-          <div class="nav-row">
-            <button class="btn ghost" id="back1">Back</button>
-            <button class="btn primary" id="to3">Continue</button>
-          </div>
-        </div>
-
-        <div class="step-content" data-step="3">
-          <div class="section-label">Step 4 of 4</div>
-          <div class="step-title">Generate your pack</div>
-          <div class="step-desc">Click Generate. Then copy it into a GitHub Issue. That’s the whole “public record” move.</div>
-
-          <div class="nav-row">
-            <button class="btn ghost" id="back2">Back</button>
-            <div style="display:flex;gap:10px;flex-wrap:wrap">
-              <button class="btn primary" id="genBtn">Generate Pack</button>
-            </div>
-          </div>
-
-          <div class="byoa">
-            <h3>Bring your own agent (optional)</h3>
-            <p>Static page means no keys here. If you want, you can copy this tool schema into your agent so it can generate packs locally and still output the same format.</p>
-            <div class="mini" id="toolSchema"></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="preview-dock">
-      <div class="dock-header">
-        <div class="dock-title">Live preview</div>
-      </div>
-      <div class="dock-body">
-
-        <div class="score-ring-wrap">
-          <svg class="score-ring-svg" width="80" height="80" viewBox="0 0 80 80">
-            <defs>
-              <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#00ff88"/>
-                <stop offset="100%" stop-color="#38bdf8"/>
-              </linearGradient>
-            </defs>
-            <circle class="score-ring-track" cx="40" cy="40" r="33"/>
-            <circle class="score-ring-fill" id="ringFill" cx="40" cy="40" r="33"
-              stroke-dasharray="207.3" stroke-dashoffset="207.3"/>
-          </svg>
-          <div>
-            <div class="score-number" id="scoreNum">—</div>
-            <div class="score-label">testability score</div>
-            <div class="score-verdict" id="scoreVerdict" style="color:var(--muted)">Pick a project to score it.</div>
-          </div>
-        </div>
-
-        <hr class="fancy"/>
-
-        <div class="block" id="claimBlock" style="opacity:.35">
-          <div class="label">claim</div>
-          <div class="text" id="previewClaim">Choose a project.</div>
-        </div>
-
-        <div class="block fail" id="failBlock" style="opacity:.35">
-          <div class="label">falsifier</div>
-          <div class="text" id="previewFalsifier">—</div>
-        </div>
-
-        <div class="witnesses-label" id="wLabel" style="display:none">Court tests</div>
-        <div id="witnessList"></div>
-
-        <hr class="fancy"/>
-
-        <div class="tabs">
-          <button class="tab active" id="tabIssue">Issue body</button>
-          <button class="tab" id="tabYaml">YAML spec</button>
-        </div>
-
-        <div class="copy-row">
-          <button class="btn sm" id="copyBtn">Copy</button>
-          <a class="btn sm primary" id="ghLink" href="#" target="_blank" rel="noopener" style="opacity:.4;pointer-events:none">Open blank Issue</a>
-        </div>
-
-        <div class="output-box" id="outputBox">(generate to see output)</div>
-      </div>
-    </div>
+  <div class="container">
+    <div id="progressHost"></div>
+    <div id="app"></div>
   </div>
 </div>
 
 <script>
-  const REPO_NEW_ISSUE = "https://github.com/terryncew/openline-idea-forge/issues/new";
+(() => {
+  // ───────────────────────── Data (demo) ─────────────────────────
+  const MARKET_STATS = {
+    activePacks: 84,
+    avgReturn: "2.3×",
+    totalStaked: "$48,200",
+    lastPayout: "$340",
+    passRate: "67%",
+    avgDays: 11,
+  };
 
-  const TOPICS = [
-    { key:"ai-governance", icon:"🧠", title:"AI governance", meta:"Stop runaway behavior. Make drift visible." },
-    { key:"climate", icon:"🌱", title:"Climate & carbon", meta:"Carbon accounting, stability, durability." },
-    { key:"cost", icon:"⚡", title:"Cost & productivity", meta:"Reduce waste. Shorten time-to-results." },
-    { key:"privacy", icon:"🔒", title:"Privacy & freedom", meta:"Proof without surveillance." }
+  const LIVE_FEED = [
+    { id: "OP-ARB-7F2A", domain: "Machine Learning", p: 0.84, payout: "$340", status: "SETTLED PASS" },
+    { id: "OP-ARB-3C9B", domain: "Synthetic Biology", p: 0.71, payout: "$180", status: "STAKED" },
+    { id: "OP-BIO-1A4D", domain: "Neuroscience", p: 0.62, payout: "$520", status: "OPEN" },
+    { id: "OP-ARB-8E2F", domain: "Robotics", p: 0.78, payout: "$210", status: "SETTLED PASS" },
+    { id: "OP-CHM-5D1A", domain: "Materials Science", p: 0.55, payout: "$890", status: "STAKED" },
   ];
 
-  const PROJECTS = { /* keep your existing PROJECTS object here unchanged */ };
-  const SETUPS   = [ /* keep your existing SETUPS array here unchanged */ ];
-  const WINDOWS  = [ /* keep your existing WINDOWS array here unchanged */ ];
+  const INTEREST_DOMAINS = [
+    { key: "ai", icon: "🧠", label: "AI & Agents", sub: "LLMs, evals, alignment" },
+    { key: "bio", icon: "🧬", label: "Biology", sub: "Synbio, genomics, cells" },
+    { key: "climate", icon: "🌍", label: "Climate", sub: "Carbon, energy, materials" },
+    { key: "neuro", icon: "🧠", label: "Neuroscience", sub: "Cognition, brain, behavior" },
+    { key: "robotics", icon: "🤖", label: "Robotics", sub: "Autonomy, motion, sensing" },
+    { key: "pharma", icon: "💊", label: "Drug Discovery", sub: "Molecules, targets, trials" },
+    { key: "data", icon: "📈", label: "Data & Stats", sub: "Methods, inference, models" },
+    { key: "physics", icon: "🔭", label: "Physics", sub: "Quantum, materials, optics" },
+  ];
 
+  const ROLES = [
+    { key: "researcher", icon: "🧪", label: "I run experiments", sub: "I want to stake & test" },
+    { key: "investor", icon: "💸", label: "I back ideas", sub: "I want to bet on outcomes" },
+    { key: "builder", icon: "🛠", label: "I build things", sub: "I want problems to solve" },
+    { key: "curious", icon: "🧭", label: "Just exploring", sub: "Show me what's here" },
+  ];
+
+  const BUDGETS = [
+    { key: "low",  label: "$10–$50",  sub: "Test the waters" },
+    { key: "mid",  label: "$50–$250", sub: "Serious bet" },
+    { key: "high", label: "$250–$1k",  sub: "Full position" },
+    { key: "xl",   label: "$1k+",     sub: "Lead the round" },
+  ];
+
+  const STEPS = ["Market", "Your Profile", "Finding Your Pack", "Your Opportunity", "Get In"];
+
+  // ───────────────────────── State ─────────────────────────
+  const state = {
+    step: 0, // 0..4
+    profile: { domains: [], role: null, budget: null },
+    pack: null,
+    mode: null, // "bet" | "run"
+  };
+
+  // ───────────────────────── Helpers ─────────────────────────
   const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
 
-  const state = { step:0, topic:"ai-governance", project:null, setup:"team", window:"weekend", activeTab:"issue", issueBody:"", yamlBody:"", ghUrl:"" };
+  function setCrumb(){
+    const label = state.step > 0 && STEPS[state.step] ? STEPS[state.step].toUpperCase() : "LIVE MARKET";
+    $("crumb").textContent = label;
+  }
 
-  function goStep(n){
+  function renderProgress(){
+    const host = $("progressHost");
+    if (state.step <= 0 || state.step >= 4) { host.innerHTML = ""; return; }
+    const stepIndex = state.step - 1;
+    const total = 3;
+    let bars = "";
+    for (let i=0;i<total;i++){
+      const flex = (i === stepIndex) ? 3 : 1;
+      const bg = (i <= stepIndex) ? "var(--green)" : "var(--bg3)";
+      const opacity = (i < stepIndex) ? 0.4 : 1;
+      bars += `<div class="bar" style="flex:${flex};background:${bg};opacity:${opacity}"></div>`;
+    }
+    host.innerHTML = `<div class="progress">${bars}</div>`;
+  }
+
+  function statusDotColor(status){
+    if (status.includes("PASS")) return "var(--green)";
+    if (status === "STAKED") return "var(--amber)";
+    return "var(--blue)";
+  }
+
+  function renderTicker(){
+    const track = $("tickerTrack");
+    const items = [...LIVE_FEED, ...LIVE_FEED];
+    track.innerHTML = items.map(item => `
+      <span class="tick">
+        <span style="width:6px;height:6px;border-radius:50%;background:${statusDotColor(item.status)};display:inline-block"></span>
+        <span>${esc(item.id)}</span>
+        <strong>${esc(item.domain)}</strong>
+        <strong style="color:${item.status.includes("PASS") ? "var(--green)" : "var(--text)"}">${esc(item.payout)}</strong>
+        <span class="pill" style="
+          background:${item.status.includes("PASS") ? "rgba(0,255,136,.12)" : item.status==="STAKED" ? "rgba(245,166,35,.1)" : "rgba(56,217,240,.1)"};
+          color:${item.status.includes("PASS") ? "var(--green)" : item.status==="STAKED" ? "var(--amber)" : "var(--blue)"};
+          border-color:rgba(255,255,255,.05)
+        ">${esc(item.status)}</span>
+      </span>
+    `).join("");
+  }
+
+  function go(n){
     state.step = n;
-    document.querySelectorAll(".step-content").forEach(el=>el.classList.toggle("active", +el.dataset.step === n));
-    document.querySelectorAll(".step-pill").forEach(el=>{
-      const s = +el.dataset.step;
-      el.classList.toggle("active", s === n);
-      el.classList.toggle("done", s < n);
-    });
+    setCrumb();
+    renderProgress();
+    render();
+    window.scrollTo({top:0, behavior:"smooth"});
   }
 
-  document.querySelectorAll(".step-pill").forEach(el=>{
-    el.addEventListener("click", ()=>{
-      const s = +el.dataset.step;
-      if (s <= state.step) goStep(s);
-    });
-  });
+  // Deterministic pack generator (no API calls; works on GitHub Pages)
+  function makePack(profile){
+    const domainNames = profile.domains.map(k => INTEREST_DOMAINS.find(d => d.key === k)?.label).filter(Boolean);
+    const sourceDomain = domainNames[0] || "Neuroscience";
+    const targetDomain = domainNames[1] || domainNames[0] || "Machine Learning";
 
-  function makeSelCard({icon,title,meta,selected,badge,badgeClass,extra,onclick}){
-    const d = document.createElement("div");
-    d.className = "sel-card" + (selected ? " sel" : "");
-    d.innerHTML = `
-      <div class="check">✓</div>
-      ${icon ? `<div class="card-icon">${icon}</div>` : ""}
-      <div class="card-title">${title}</div>
-      <div class="card-meta">${meta}</div>
-      ${badge ? `<span class="card-badge ${badgeClass||""}">${badge}</span>` : ""}
-      ${extra || ""}
-    `;
-    d.onclick = onclick;
-    return d;
+    const roleLabel = ROLES.find(r => r.key === profile.role)?.label || "I run experiments";
+    const budgetLabel = BUDGETS.find(b => b.key === profile.budget)?.label || "$50–$250";
+
+    // cheap pseudo-scoring
+    const dCount = Math.max(1, profile.domains.length);
+    const roleBoost = profile.role === "researcher" ? 0.06 : profile.role === "builder" ? 0.04 : profile.role === "investor" ? 0.02 : 0.01;
+    const budgetBoost = profile.budget === "xl" ? 0.06 : profile.budget === "high" ? 0.04 : profile.budget === "mid" ? 0.02 : 0.01;
+    const base = 0.58 + Math.min(0.12, (dCount-1)*0.04) + roleBoost + budgetBoost;
+    const pSuccess = Math.max(0.45, Math.min(0.86, base));
+
+    const cheatRisk = pSuccess >= 0.78 ? "low" : pSuccess >= 0.62 ? "medium" : "high";
+    const multiplier = cheatRisk === "low" ? 1.8 : cheatRisk === "medium" ? 2.1 : 2.7;
+    const days = cheatRisk === "low" ? 7 : cheatRisk === "medium" ? 9 : 12;
+
+    const id = `OP-ARB-${Math.random().toString(16).slice(2,6).toUpperCase()}`;
+
+    // Concrete-ish claim templates (domain flavored)
+    const claim = `Translate a mechanism from ${sourceDomain} into ${targetDomain} and beat a baseline by ≥25% on a pre-registered metric within ${days} days.`;
+    const falsifier = `FAIL if: improvement < 25% OR cost exceeds 3× baseline OR the mechanism cannot be reproduced by an independent rerun.`;
+    const kpi = `≥25% improvement vs baseline`;
+
+    const whyYou = `You picked ${domainNames.join(", ") || "a domain"}. That’s enough context to spot the shortcut pathways and write a real falsifier. Budget: ${budgetLabel}. Role: ${roleLabel}.`;
+
+    const witnesses = [
+      ["W1_TRANSLATION","origin","hard","mechanism definition is explicit + testable","mechanism is metaphor / cannot be operationalized"],
+      ["W2_BASELINE","cheat_suppression","hard","baseline is locked + measured before changes","baseline shifts / moving target"],
+      ["W3_MECHANISM","mechanism_fidelity","hard","effect persists under control + ablation","effect vanishes under control/ablation"],
+      ["W4_COST","cost_feasibility","soft","time+cost remain within cap","time+cost blow past cap"],
+    ];
+
+    const exec = Math.max(0.5, Math.min(0.92, 0.62 + (profile.role==="researcher"?0.12:0.06) + (profile.budget==="high"||profile.budget==="xl"?0.06:0.02)));
+    const mech = Math.max(0.45, Math.min(0.9, 0.6 + (dCount>=2?0.12:0.06)));
+    const costFit = Math.max(0.4, Math.min(0.9, 0.58 + (profile.budget==="xl"?0.2:profile.budget==="high"?0.12:profile.budget==="mid"?0.06:0.02)));
+    const priorArt = Math.max(0.2, Math.min(0.8, 0.28 + (dCount>=2?0.08:0.02)));
+
+    const minStake = profile.budget==="low"?25 : profile.budget==="mid"?50 : profile.budget==="high"?250 : 500;
+
+    return {
+      id, title: "Cross-domain mechanism translation",
+      domain: targetDomain, source_domain: sourceDomain,
+      claim, falsifier, kpi, cheat_risk: cheatRisk,
+      why_you: whyYou, witnesses,
+      executability: exec, mechanism_clarity: mech, cost_feasibility: costFit, prior_art_density: priorArt,
+      p_success: pSuccess,
+      min_stake: minStake,
+      expected_return_multiplier: multiplier,
+      time_to_result_days: days,
+    };
   }
 
-  function renderTopics(){
-    const g = $("topicsGrid"); g.innerHTML = "";
-    TOPICS.forEach(t=>{
-      g.appendChild(makeSelCard({
-        icon:t.icon, title:t.title, meta:t.meta,
-        selected: state.topic === t.key,
-        onclick(){ state.topic = t.key; state.project = null; renderTopics(); renderProjects(); updatePreview(); }
-      }));
-    });
-  }
-
-  function renderProjects(){
-    const list = PROJECTS[state.topic] || [];
-    if (!state.project && list.length) state.project = list[0];
-    const g = $("projectsGrid"); g.innerHTML = "";
-    list.forEach(p=>{
-      const riskClass = p.cheat_risk === "high" ? "high" : (p.cheat_risk === "medium" ? "medium" : "low");
-      g.appendChild(makeSelCard({
-        title:p.title, meta:p.kpi,
-        selected: state.project && state.project.id === p.id,
-        badge:`cheat_risk: ${p.cheat_risk}`, badgeClass:riskClass,
-        extra:`<div class="proj-claim">${p.claim}</div><div class="proj-fail">FAIL: ${p.falsifier}</div>`,
-        onclick(){ state.project = p; renderProjects(); updatePreview(); }
-      }));
-    });
-  }
-
-  function renderSetups(){
-    const g = $("setupsGrid"); g.innerHTML = "";
-    SETUPS.forEach(s=>{
-      g.appendChild(makeSelCard({
-        icon:s.icon, title:s.title,
-        meta:`${s.meta}<br><span style="opacity:.75">${s.note}</span>`,
-        selected: state.setup === s.key,
-        onclick(){ state.setup = s.key; renderSetups(); updatePreview(); }
-      }));
-    });
-  }
-
-  function renderWindows(){
-    const g = $("windowsGrid"); g.innerHTML = "";
-    WINDOWS.forEach(w=>{
-      g.appendChild(makeSelCard({
-        icon:w.icon, title:w.title, meta:w.meta,
-        selected: state.window === w.key,
-        onclick(){ state.window = w.key; renderWindows(); updatePreview(); }
-      }));
-    });
-  }
-
-  function computeScore(p){
-    if (!p) return 0;
-    const base = 55;
-    const witness = Math.min(20, (p.witnesses?.length||0)*5);
-    const setup = (SETUPS.find(x=>x.key===state.setup)?.score)||0;
-    const win = (WINDOWS.find(x=>x.key===state.window)?.score)||0;
-    const cheatPenalty = p.cheat_risk === "high" ? 12 : (p.cheat_risk === "medium" ? 7 : 3);
-    return Math.max(0, Math.min(100, base + witness + setup + win - cheatPenalty));
-  }
-
-  function riskGuideText(p){
-    if (!p) return "Pick a project to see the recommended proof discipline.";
-    if (p.cheat_risk === "high") return "HIGH: assume it can fake a win. Run strict controls first + require independent verification.";
-    if (p.cheat_risk === "medium") return "MED: do controls + a replicate. Watch for decay/side-effects.";
-    return "LOW: basic controls usually catch failure. Run the cheap falsifier first, then extend time window.";
-  }
-
-  function updatePreview(){
-    const p = state.project; if (!p) return;
-    const s = computeScore(p);
-    $("scoreNum").textContent = s;
-    const circumference = 2*Math.PI*33;
-    $("ringFill").style.strokeDashoffset = circumference - (s/100)*circumference;
-
-    const verdict = s>=85 ? ["var(--green)","High confidence — testable this week."] :
-                    s>=70 ? ["var(--blue)","Testable with tight guardrails."] :
-                            ["var(--amber)","Needs stronger proof to be credible."];
-    $("scoreVerdict").style.color = verdict[0];
-    $("scoreVerdict").textContent = verdict[1];
-
-    $("claimBlock").style.opacity = "1";
-    $("failBlock").style.opacity = "1";
-    $("previewClaim").textContent = p.claim;
-    $("previewFalsifier").textContent = p.falsifier;
-
-    const rg = $("riskGuideText");
-    if (rg) rg.textContent = riskGuideText(p);
-
-    const wl = $("witnessList"); wl.innerHTML = "";
-    $("wLabel").style.display = "block";
-    (p.witnesses||[]).forEach(w=>{
-      const item = document.createElement("div");
-      item.className = "witness-item";
-      item.innerHTML = `
-        <div class="w-dot ${w[2]}"></div>
-        <div class="w-id">${w[0]}</div>
-        <div>
-          <div class="w-text">PASS: ${w[3]}</div>
-          <div class="w-fail">FAIL: ${w[4]}</div>
-        </div>`;
-      wl.appendChild(item);
-    });
-
-    $("toolSchema").textContent = JSON.stringify({
-      name: "idea_forge_pack",
-      description: "Generate an Opportunity Pack (claim + court tests + falsifier) in openline.science.v1 format.",
-      parameters: {
-        type: "object",
-        properties: {
-          topic: { type: "string", enum: TOPICS.map(t=>t.key) },
-          project_id: { type: "string" },
-          setup: { type: "string", enum: SETUPS.map(s=>s.key) },
-          time_window: { type: "string", enum: WINDOWS.map(w=>w.key) }
-        },
-        required: ["topic","project_id","setup","time_window"]
-      }
-    }, null, 2);
-  }
-
-  function escYamlQuoted(s){ return String(s||"").replaceAll("\\","\\\\").replaceAll('"','\\"'); }
-  function yamlBlock(key, value, indent=""){
-    const lines = String(value ?? "").split("\n");
-    return `${indent}${key}: |-\n` + lines.map(l=>`${indent}  ${l}`).join("\n") + "\n";
-  }
-
-  function buildArtifact(){
-    const p = state.project; if (!p) return alert("Pick a project first.");
-    const setup = SETUPS.find(x=>x.key===state.setup);
-    const win = WINDOWS.find(x=>x.key===state.window);
-    const score = computeScore(p);
-    const id = `OP-${p.domain.toUpperCase()}-${new Date().toISOString().slice(2,10).replaceAll("-","")}`;
-
-    const witnessLines = (p.witnesses||[]).map(w =>
+  function packToIssue(pack, profile){
+    const domainNames = profile.domains.map(k => INTEREST_DOMAINS.find(d => d.key === k)?.label).filter(Boolean).join(", ") || "—";
+    const witnessLines = (pack.witnesses||[]).map(w =>
       `- ${w[0]} (${w[1]}, ${w[2]}): PASS if ${w[3]}. FAIL if ${w[4]}.`
     ).join("\n");
 
-    const limitLines = (p.limits||[]).map(x => `- ${x}`).join("\n");
+    return `ID: ${pack.id}
+FLOW: onboarding_demo
+PROFILE:
+- domains: ${domainNames}
+- role: ${profile.role}
+- budget: ${profile.budget}
 
-    state.issueBody =
-`ID: ${id}
-TOPIC: ${state.topic}
-DOMAIN: ${p.domain}
-
-RANKING:
-- testability_score: ${score}/100
-- setup: ${setup.key}
-- time_window: ${win.key}
-- cheat_risk: ${p.cheat_risk} (how easy it is to fake a win)
-
-LIMITS:
-${limitLines}
+PACK:
+- title: ${pack.title}
+- source_domain: ${pack.source_domain}
+- domain: ${pack.domain}
+- p_success: ${Math.round(pack.p_success*100)}%
+- cheat_risk: ${pack.cheat_risk}
 
 CLAIM:
-- ${p.claim}
+- ${pack.claim}
 
-COMMON SHORTCUT (how it fakes a win):
-- ${p.cheat}
+FALSIFIER (kill conditions):
+- ${pack.falsifier}
 
 COURT TESTS:
 ${witnessLines}
 
-FALSIFIER:
-- ${p.falsifier}
-
-MINIMUM PLAN (${win.title}):
-${win.plan.map((s,i)=>`- Step ${i+1}: ${s}`).join("\n")}
-
-WHO BENEFITS IF TRUE:
-- ${p.buyer}
-
-WHY IT MATTERS:
-- KPI: ${p.kpi}
-
-NOTES:
-- ${p.notes}
+RECEIPT_FAMILY:
+- openline.science.v1
 `;
-
-    const limitsYaml = (p.limits||[]).map(x=>`  - "${escYamlQuoted(x)}"`).join("\n");
-    const courtYaml = (p.witnesses||[]).map(w=>`  - id: "${escYamlQuoted(w[0])}"
-    role: "${escYamlQuoted(w[1])}"
-    hardness: "${escYamlQuoted(w[2])}"
-    pass_condition: "${escYamlQuoted(w[3])}"
-    fail_condition: "${escYamlQuoted(w[4])}"`).join("\n");
-
-    const minPlanYaml = win.plan.map((s,i)=>`  - tier: "${i===0?"cheap":i===1?"mid":"expensive"}"
-    step: |-
-      ${String(s).replaceAll("\n","\n      ")}`).join("\n");
-
-    state.yamlBody =
-`schema_version: "idea_forge.v1"
-kind: "opportunity_pack"
-id: "${id}"
-topic: "${state.topic}"
-domain: "${p.domain}"
-title: "${escYamlQuoted(p.title)}"
-ranking:
-  testability_score: ${score}
-  setup: "${setup.key}"
-  time_window: "${win.key}"
-cheat_risk: "${p.cheat_risk}"
-limits:
-${limitsYaml}
-${yamlBlock("goal_kpi", p.kpi)}
-${yamlBlock("claim", p.claim)}
-${yamlBlock("common_shortcut", p.cheat)}
-court_tests:
-${courtYaml}
-${yamlBlock("falsifier", p.falsifier)}
-min_plan:
-${minPlanYaml}
-${yamlBlock("beneficiary", p.buyer)}
-${yamlBlock("notes", p.notes)}
-receipt_family: "openline.science.v1"
-`;
-
-    renderOutput();
-
-    const title = `Opportunity Pack: ${p.domain.toUpperCase()} — ${p.title}`;
-    state.ghUrl = `${REPO_NEW_ISSUE}?title=${encodeURIComponent(title)}`;
-    const link = $("ghLink");
-    link.textContent = "Open blank Issue";
-    link.href = state.ghUrl;
-    link.style.opacity = "1";
-    link.style.pointerEvents = "auto";
-
-    $("quickCopy").disabled = false;
-    goStep(3);
   }
 
-  function renderOutput(){
-    $("outputBox").textContent = state.activeTab === "issue" ? (state.issueBody||"(generate to see output)") : (state.yamlBody||"(generate to see output)");
+  function packToReceiptStub(pack){
+    // stub receipt (static demo). In real version, this is hashed+signed.
+    return JSON.stringify({
+      receipt_family: "openline.science.v1",
+      kind: "opportunity_pack",
+      id: pack.id,
+      domain: pack.domain,
+      source_domain: pack.source_domain,
+      claim: pack.claim,
+      falsifier: pack.falsifier,
+      witnesses: pack.witnesses,
+      p_success: pack.p_success,
+      cheat_risk: pack.cheat_risk,
+      expected_return_multiplier: pack.expected_return_multiplier,
+      time_to_result_days: pack.time_to_result_days,
+      // demo hash placeholder
+      sha256: "DEMO_ONLY__NO_SIGNATURE",
+      timestamp: new Date().toISOString()
+    }, null, 2);
   }
 
-  function switchTab(which){
-    state.activeTab = which;
-    $("tabIssue").classList.toggle("active", which==="issue");
-    $("tabYaml").classList.toggle("active", which==="yaml");
-    renderOutput();
+  // ───────────────────────── Views ─────────────────────────
+  function viewMarket(){
+    const app = $("app");
+    app.innerHTML = `
+      <div class="fu" style="max-width:760px;margin:0 auto;padding:40px 0 0">
+        <div class="fu" style="text-align:center;margin-bottom:48px">
+          <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px">
+            OpenLine Exchange · Live Market
+          </div>
+          <div style="
+            font-family:var(--display);font-weight:900;font-size:clamp(52px,10vw,96px);
+            line-height:1;color:var(--green);letter-spacing:-.02em;
+            text-shadow:0 0 40px rgba(0,255,136,.4)
+          ">${esc(MARKET_STATS.totalStaked)}</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--mid);margin-top:8px">
+            currently staked across ${esc(MARKET_STATS.activePacks)} open packs
+          </div>
+        </div>
+
+        <div class="fu1 grid3" style="margin-bottom:32px">
+          ${[
+            { label:"AVG RETURN", value: MARKET_STATS.avgReturn, color:"var(--green)", sub:"per winning position" },
+            { label:"LAST PAYOUT", value: MARKET_STATS.lastPayout, color:"var(--amber)", sub:"ML eval pack · recently" },
+            { label:"PASS RATE", value: MARKET_STATS.passRate, color:"var(--blue)", sub:"of settled experiments" },
+          ].map(s => `
+            <div class="card" style="padding:18px 20px;text-align:center">
+              <div style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.12em;margin-bottom:8px">${esc(s.label)}</div>
+              <div style="font-family:var(--display);font-size:36px;font-weight:900;color:${s.color};line-height:1;margin-bottom:4px">${esc(s.value)}</div>
+              <div style="font-family:var(--mono);font-size:9px;color:var(--mid)">${esc(s.sub)}</div>
+            </div>
+          `).join("")}
+        </div>
+
+        <div class="fu2 card" style="overflow:hidden;margin-bottom:32px">
+          <div style="padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+            <span style="width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite"></span>
+            <span style="font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:.1em">LIVE SETTLEMENTS</span>
+          </div>
+          ${LIVE_FEED.slice(0,4).map((item,i)=>`
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;${i<3?"border-bottom:1px solid rgba(255,255,255,.03)":"border-bottom:none"}">
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="font-family:var(--mono);font-size:9px;color:var(--mid)">${esc(item.id)}</span>
+                <span style="font-size:12px;color:var(--text)">${esc(item.domain)}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px">
+                <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--green)">${Math.round(item.p*100)}%</span>
+                <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:${item.status.includes("PASS")?"var(--green)":"var(--text)"}">${esc(item.payout)}</span>
+                <span class="pill" style="
+                  background:${item.status.includes("PASS") ? "rgba(0,255,136,.12)" : item.status==="STAKED" ? "rgba(245,166,35,.1)" : "rgba(56,217,240,.1)"};
+                  color:${item.status.includes("PASS") ? "var(--green)" : item.status==="STAKED" ? "var(--amber)" : "var(--blue)"};
+                ">${esc(item.status)}</span>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+
+        <div class="fu3" style="text-align:center">
+          <div class="muted" style="margin-bottom:16px">We’ll match you to a pack for your background and tolerance.</div>
+          <button class="btn btnPrimary" id="btnStart" style="padding:16px 40px;font-size:18px">FIND MY PACK →</button>
+          <div class="monoSmall" style="margin-top:10px">takes ~60 seconds · no wallet needed to explore</div>
+        </div>
+      </div>
+    `;
+
+    $("btnStart").onclick = () => go(1);
   }
 
-  async function doCopy(){
-    const txt = state.activeTab === "issue" ? state.issueBody : state.yamlBody;
-    if (!txt) return;
-    await navigator.clipboard.writeText(txt);
-    const btn = $("copyBtn"); const prev = btn.textContent;
-    btn.textContent = "✓ Copied"; setTimeout(()=>btn.textContent=prev, 1400);
+  function viewProfile(){
+    const p = state.profile;
+    const app = $("app");
+
+    const domainsHtml = INTEREST_DOMAINS.map(d => {
+      const sel = p.domains.includes(d.key);
+      return `
+        <div class="chip ${sel?"sel":""}" data-domain="${esc(d.key)}">
+          <div style="font-size:20px;margin-bottom:5px">${esc(d.icon)}</div>
+          <div class="label">${esc(d.label)}</div>
+          <div class="sub">${esc(d.sub)}</div>
+        </div>
+      `;
+    }).join("");
+
+    const rolesHtml = ROLES.map(r => {
+      const sel = p.role === r.key;
+      return `
+        <div class="rowCard ${sel?"sel":""}" data-role="${esc(r.key)}">
+          <span style="font-size:22px">${esc(r.icon)}</span>
+          <div>
+            <div class="title" style="font-size:13px;font-weight:600;color:${sel?"var(--amber)":"var(--text)"}">${esc(r.label)}</div>
+            <div class="sub">${esc(r.sub)}</div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    const budgetsHtml = BUDGETS.map(b => {
+      const sel = p.budget === b.key;
+      return `
+        <div class="chip ${sel?"sel":""}" data-budget="${esc(b.key)}" style="
+          border-color:${sel?"rgba(56,217,240,.5)":"var(--border)"};
+          background:${sel?"rgba(56,217,240,.06)":"var(--bg1)"};
+        ">
+          <div style="font-family:var(--display);font-weight:800;font-size:18px;color:${sel?"var(--blue)":"var(--text)"}">${esc(b.label)}</div>
+          <div class="sub">${esc(b.sub)}</div>
+        </div>
+      `;
+    }).join("");
+
+    const canContinue = p.domains.length>0 && !!p.role && !!p.budget;
+
+    app.innerHTML = `
+      <div style="max-width:680px;margin:0 auto;padding:32px 0 0">
+        <div class="fu" style="margin-bottom:32px">
+          <div class="kicker">STEP 1 OF 2 · YOUR PROFILE</div>
+          <div class="title" style="font-size:36px;margin:8px 0 6px">What do you know?</div>
+          <div class="muted">We’ll match a pack that fits. No blank boxes.</div>
+        </div>
+
+        <div class="fu1" style="margin-bottom:24px">
+          <div class="monoSmall" style="color:var(--dim);letter-spacing:.12em;margin-bottom:10px">YOUR DOMAIN(S) — pick all that apply</div>
+          <div class="grid4" id="domainsGrid">${domainsHtml}</div>
+        </div>
+
+        <div class="fu2" style="margin-bottom:24px">
+          <div class="monoSmall" style="color:var(--dim);letter-spacing:.12em;margin-bottom:10px">HOW DO YOU WANT TO PARTICIPATE?</div>
+          <div class="grid2" id="rolesGrid">${rolesHtml}</div>
+        </div>
+
+        <div class="fu3" style="margin-bottom:28px">
+          <div class="monoSmall" style="color:var(--dim);letter-spacing:.12em;margin-bottom:10px">YOUR POSITION SIZE</div>
+          <div class="grid4" id="budgetsGrid">${budgetsHtml}</div>
+        </div>
+
+        <button class="btn ${canContinue?"btnPrimary":"btnGhost"}" id="btnNext" ${canContinue?"":"disabled"} style="width:100%;padding:14px;font-size:18px">
+          ${canContinue ? "ANALYZE MY MATCHES →" : "COMPLETE YOUR PROFILE TO CONTINUE"}
+        </button>
+
+        <div class="copyRow" style="margin-top:14px">
+          <button class="btn btnGhost" id="btnBack" style="padding:10px 14px;font-size:14px">← Back</button>
+        </div>
+      </div>
+    `;
+
+    // handlers
+    $("btnBack").onclick = () => go(0);
+
+    $("domainsGrid").querySelectorAll("[data-domain]").forEach(el=>{
+      el.onclick = () => {
+        const k = el.getAttribute("data-domain");
+        const sel = state.profile.domains.includes(k);
+        state.profile.domains = sel ? state.profile.domains.filter(x=>x!==k) : [...state.profile.domains, k];
+        viewProfile();
+      };
+    });
+
+    $("rolesGrid").querySelectorAll("[data-role]").forEach(el=>{
+      el.onclick = () => {
+        state.profile.role = el.getAttribute("data-role");
+        viewProfile();
+      };
+    });
+
+    $("budgetsGrid").querySelectorAll("[data-budget]").forEach(el=>{
+      el.onclick = () => {
+        state.profile.budget = el.getAttribute("data-budget");
+        viewProfile();
+      };
+    });
+
+    $("btnNext").onclick = () => go(2);
   }
 
-  async function doQuickCopyIssue(){
-    if (!state.issueBody) return;
-    await navigator.clipboard.writeText(state.issueBody);
-    const btn = $("quickCopy"); const prev = btn.textContent;
-    btn.textContent = "✓ Copied Issue"; setTimeout(()=>btn.textContent=prev, 1400);
+  function viewGenerating(){
+    const app = $("app");
+    const PHASES = [
+      "Scanning 84 open packs…",
+      "Filtering by your domain profile…",
+      "Computing mechanism fit…",
+      "Ranking by P(success)…",
+      "Generating your pack…",
+      "Calculating return scenarios…",
+    ];
+    let phase = 0;
+
+    app.innerHTML = `
+      <div style="max-width:480px;margin:80px auto 0;text-align:center">
+        <div class="spin"></div>
+        <div class="title fu" style="font-size:28px;margin-bottom:8px">Scanning the market for you</div>
+        <div class="fu1" id="phaseText" style="font-family:var(--mono);font-size:11px;color:var(--green);margin-bottom:32px;min-height:20px">${esc(PHASES[0])}</div>
+        <div class="miniSteps" id="phaseList"></div>
+      </div>
+    `;
+
+    function paint(){
+      $("phaseText").textContent = PHASES[phase];
+      const list = PHASES.slice(0, phase+1).map((t,i)=>{
+        const done = i < phase;
+        return `
+          <div class="miniStep" style="opacity:${done?0.4:1}">
+            <span class="miniDot" style="background:${done?"rgba(0,255,136,.3)":"var(--green)"}">${done?"✓":"·"}</span>
+            <span style="font-family:var(--mono);font-size:10px;color:${done?"var(--mid)":"var(--text)"}">${esc(t)}</span>
+          </div>
+        `;
+      }).join("");
+      $("phaseList").innerHTML = list;
+    }
+
+    paint();
+
+    const timer = setInterval(()=>{
+      phase = Math.min(phase+1, PHASES.length-1);
+      paint();
+      if (phase === PHASES.length-1){
+        clearInterval(timer);
+        setTimeout(()=>{
+          state.pack = makePack(state.profile);
+          go(3);
+        }, 650);
+      }
+    }, 800);
   }
 
-  function quickGenerate(){
-    if (!state.project){ renderProjects(); }
-    buildArtifact();
-    switchTab("issue");
-    goStep(3);
-  }
+  function viewPack(){
+    const pack = state.pack;
+    const profile = state.profile;
+    const app = $("app");
 
-  $("to1").onclick = ()=>goStep(1);
-  $("to2").onclick = ()=>goStep(2);
-  $("to3").onclick = ()=>goStep(3);
-  $("back0").onclick = ()=>goStep(0);
-  $("back1").onclick = ()=>goStep(1);
-  $("back2").onclick = ()=>goStep(2);
+    const pct = Math.round((pack.p_success || 0.75)*100);
+    const pColor = pct >= 75 ? "var(--green)" : pct >= 55 ? "var(--amber)" : "var(--red)";
+    const multiplier = pack.expected_return_multiplier || 2.1;
 
-  $("genBtn").onclick = buildArtifact;
-  $("tabIssue").onclick = ()=>switchTab("issue");
-  $("tabYaml").onclick = ()=>switchTab("yaml");
-  $("copyBtn").onclick = doCopy;
+    const budgetMap = { low:[10,25,50], mid:[50,100,250], high:[250,500,1000], xl:[500,1000,2500] };
+    const stakeOptions = budgetMap[profile.budget] || [50,100,250];
+    let stake = stakeOptions[1] || stakeOptions[0] || 50;
 
-  $("quickGen").onclick = quickGenerate;
-  $("quickCopy").onclick = doQuickCopyIssue;
+    function renderStake(){
+      const potentialReturn = Math.round(stake * multiplier);
+      const netGain = potentialReturn - stake;
+      return { potentialReturn, netGain };
+    }
 
-  renderTopics();
-  renderProjects();
-  renderSetups();
-  renderWindows();
-  updatePreview();
-</script>
-</body>
-</html>
+    const meters = [
+      ["EXECUTABILITY", pack.executability, "var(--green)"],
+      ["MECH. CLARITY", pack.mechanism_clarity, "var(--blue)"],
+      ["COST FIT", pack.cost_feasibility, "var(--amber)"],
+    ];
+
+    function stakeButtonsHtml(){
+      return stakeOptions.map(s => `
+        <button class="stakeBtn" data-stake="${s}" style="
+          background:${stake===s?"var(--green)":"var(--bg3)"};
+          color:${stake===s?"#060809":"var(--mid)"};
+        ">$${s}</button>
+      `).join("");
+    }
+
+    function packHtml(){
+      const { potentialReturn, netGain } = renderStake();
+      return `
+        <div style="max-width:700px;margin:0 auto;padding:28px 0 0">
+          <div class="packBanner fu">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+              <span class="tag">YOUR MATCH · ${esc(pack.id)}</span>
+              <span style="font-family:var(--mono);font-size:9px;color:var(--mid)">${esc(pack.source_domain)} → ${esc(pack.domain)}</span>
+            </div>
+            <div class="title" style="font-size:22px;font-weight:800;line-height:1.2;margin-bottom:8px">${esc(pack.title)}</div>
+            <div style="font-family:var(--mono);font-size:10px;color:var(--green);line-height:1.6">↳ ${esc(pack.why_you || "")}</div>
+          </div>
+
+          <div class="grid2 fu1" style="margin-top:12px;margin-bottom:20px">
+            <div class="card" style="padding:20px">
+              <div class="monoSmall" style="letter-spacing:.12em;margin-bottom:8px">PROBABILITY OF SUCCESS</div>
+              <div class="scoreBig" style="color:${pColor};margin-bottom:4px">${pct}%</div>
+              <div class="monoSmall" style="color:var(--mid);margin-bottom:14px">
+                ${pct >= 75 ? "Lowest-hanging-fruit tier" : pct >= 55 ? "Good odds with controls" : "Ambitious — high reward"}
+              </div>
+              <div style="display:flex;flex-direction:column;gap:4px">
+                ${meters.map(([l,v,c])=>`
+                  <div class="meterRow">
+                    <div class="meterLab">${esc(l)}</div>
+                    <div class="meterBar"><div class="meterFill" style="width:${Math.round((v||0)*100)}%;background:${c}"></div></div>
+                    <div style="font-family:var(--mono);font-size:8px;color:${c};width:20px;text-align:right">${Math.round((v||0)*100)}</div>
+                  </div>
+                `).join("")}
+              </div>
+            </div>
+
+            <div class="card" style="padding:20px">
+              <div class="monoSmall" style="letter-spacing:.12em;margin-bottom:8px">RETURN CALCULATOR</div>
+              <div class="monoSmall" style="color:var(--mid);margin-bottom:12px">If this pack PASSES:</div>
+              <div class="stakeBtns" id="stakeBtns">${stakeButtonsHtml()}</div>
+
+              <div style="text-align:center;margin:16px 0 10px">
+                <div class="monoSmall" style="margin-bottom:4px">YOU RECEIVE</div>
+                <div class="title" style="font-family:var(--display);font-weight:900;font-size:48px;line-height:1;color:var(--green)">$${potentialReturn}</div>
+                <div style="font-family:var(--mono);font-size:10px;color:var(--green);margin-top:2px">+$${netGain} profit · ${multiplier}× return</div>
+              </div>
+
+              <div style="padding:8px 10px;border-radius:7px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)">
+                <div style="font-family:var(--mono);font-size:8px;color:var(--dim);display:flex;justify-content:space-between">
+                  <span>EST. TIME TO RESULT</span>
+                  <span style="color:var(--mid)">${esc(pack.time_to_result_days || 9)} days</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="fu2" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+            <div class="claimBox">
+              <div class="h">THE CLAIM</div>
+              <div style="font-size:13px;color:var(--text);line-height:1.65">${esc(pack.claim)}</div>
+            </div>
+            <div class="failBox">
+              <div class="h">KILL CONDITIONS — WHAT MAKES IT FAIL</div>
+              <div class="t">${esc(pack.falsifier)}</div>
+            </div>
+          </div>
+
+          <div class="grid2 fu3" style="gap:10px">
+            <button class="btn btnPrimary" id="btnBet" style="padding:16px;font-size:20px">BET IT PASSES →</button>
+            <button class="btn btnAlt" id="btnRun" style="padding:16px;font-size:20px">RUN IT MYSELF</button>
+          </div>
+
+          <div class="legal" style="margin-top:10px">
+            Betting = stake on outcome · Running = you do the witnesses and earn the payout
+          </div>
+
+          <div class="copyRow fu4">
+            <button class="btn btnGhost" id="btnBackPack" style="padding:10px 14px;font-size:14px">← Back</button>
+            <button class="btn btnGhost" id="btnIssue" style="padding:10px 14px;font-size:14px">Copy GitHub Issue body</button>
+            <button class="btn btnGhost" id="btnReceipt" style="padding:10px 14px;font-size:14px">Copy receipt stub</button>
+            <a class="btn btnGhost" id="btnOpenIssue" href="#" target="_blank" rel="noopener" style="padding:10px 14px;font-size:14px;text-decoration:none">Open new Issue</a>
+          </div>
+
+          <div class="out" id="outBox" style="display:none"></div>
+        </div>
+      `;
+    }
+
+    app.innerHTML = packHtml();
+
+    function wireStakeButtons(){
+      $("stakeBtns").querySelectorAll("[
