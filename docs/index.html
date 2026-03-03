@@ -3,478 +3,680 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>OpenLine Exchange · Demo</title>
+  <title>OpenLine · Discovery Market Demo</title>
 
-  <meta property="og:title" content="OpenLine Exchange · Demo"/>
-  <meta property="og:description" content="Find your pack. Register a falsifier. Run the witnesses. Emit a receipt."/>
+  <meta property="og:title" content="OpenLine · Discovery Market Demo"/>
+  <meta property="og:description" content="Turn an idea into an Opportunity Pack. Pre-register a falsifier. Run witnesses cheapest-first. Emit a receipt."/>
   <meta property="og:type" content="website"/>
   <meta name="twitter:card" content="summary_large_image"/>
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;800;900&family=JetBrains+Mono:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
       --bg:#060809; --bg1:#0b0e11; --bg2:#111519; --bg3:#171c21;
-      --border:rgba(0,255,136,.08); --border2:rgba(0,255,136,.2);
-      --text:#c8d8c0; --dim:#3a4a3a; --mid:#6a8a6a;
+      --border:rgba(0,255,136,.10); --border2:rgba(0,255,136,.22);
+      --text:#c8d8c0; --mid:#6a8a6a; --dim:#3a4a3a;
       --green:#00ff88; --amber:#f5a623; --red:#ff4d6a; --blue:#38d9f0;
-      --mono:'JetBrains Mono', ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --mono:'JetBrains Mono', ui-monospace, Menlo, Monaco, Consolas, monospace;
       --display:'Barlow Condensed', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       --body:'DM Sans', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      --radius:14px;
     }
-    html{scroll-behavior:smooth}
     body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--body);overflow-x:hidden}
-    a{color:inherit}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
     ::-webkit-scrollbar{width:3px}
-    ::-webkit-scrollbar-track{background:transparent}
     ::-webkit-scrollbar-thumb{background:rgba(0,255,136,.15);border-radius:99px}
 
-    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    .wrap{min-height:100vh}
     .nav{
       display:flex;align-items:center;justify-content:space-between;
-      padding:11px 22px;border-bottom:1px solid var(--border);
+      padding:12px 18px;border-bottom:1px solid var(--border);
       background:rgba(6,8,9,.95);backdrop-filter:blur(16px);
       position:sticky;top:0;z-index:50;
     }
-    .brand{display:flex;align-items:center;gap:8px}
+    .brand{display:flex;align-items:center;gap:10px}
     .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
-    .brand span{font-family:var(--display);font-size:18px;font-weight:900;letter-spacing:.06em}
-    .crumb{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+    .brandName{font-family:var(--display);font-weight:900;letter-spacing:.08em}
+    .crumb{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase}
 
-    .ticker{
-      overflow:hidden;border-bottom:1px solid var(--border);
-      background:rgba(0,255,136,.03);padding:5px 0;
+    .wrap{max-width:1040px;margin:0 auto;padding:18px 16px 56px}
+    .hero{
+      border:1px solid var(--border2);
+      border-radius:var(--radius);
+      background:linear-gradient(180deg, rgba(0,255,136,.07), rgba(255,255,255,0));
+      padding:18px 16px;
     }
-    .tickerTrack{display:inline-flex;white-space:nowrap;animation:ticker 25s linear infinite}
-    .tick{display:inline-flex;align-items:center;gap:8px;margin-right:40px;font-family:var(--mono);font-size:9px;color:var(--mid)}
-    .tick strong{color:var(--text);font-weight:600}
+    .kicker{font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px}
+    .h1{font-family:var(--display);font-weight:900;font-size:40px;line-height:1;letter-spacing:-.01em}
+    .sub{font-family:var(--mono);font-size:11px;color:var(--mid);line-height:1.6;margin-top:10px}
+    .pillRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
     .pill{
-      padding:2px 8px;border-radius:4px;font-size:8px;font-weight:700;
-      letter-spacing:.07em;border:1px solid rgba(255,255,255,.05);
-      background:rgba(255,255,255,.03);color:var(--dim);
+      font-family:var(--mono);font-size:10px;color:var(--mid);
+      border:1px solid var(--border);
+      border-radius:999px;padding:6px 10px;
+      background:rgba(255,255,255,.02);
     }
+    .pill b{color:var(--text);font-family:var(--display);font-weight:900;letter-spacing:.04em}
 
-    .container{max-width:860px;margin:0 auto;padding:0 20px 60px}
-    .fu{animation:fadeUp .45s ease both}
-    .fu1{animation:fadeUp .45s ease .1s both}
-    .fu2{animation:fadeUp .45s ease .2s both}
-    .fu3{animation:fadeUp .45s ease .3s both}
-    .fu4{animation:fadeUp .45s ease .4s both}
+    .grid{display:grid;grid-template-columns:1fr 420px;gap:14px;margin-top:14px}
+    @media(max-width:940px){.grid{grid-template-columns:1fr}}
 
-    .progress{display:flex;gap:4px;margin:24px 0 0}
-    .bar{height:3px;border-radius:99px;background:var(--bg3);transition:all .4s ease}
+    .card{
+      background:var(--bg1);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      overflow:hidden;
+    }
+    .cardHead{
+      padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.04);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+    }
+    .cardTitle{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.14em;text-transform:uppercase}
+    .cardBody{padding:14px}
 
-    .card{background:var(--bg1);border:1px solid var(--border);border-radius:12px}
+    .btnRow{display:flex;gap:8px;flex-wrap:wrap}
+    .btn{
+      border-radius:10px;border:1px solid var(--border);
+      background:rgba(255,255,255,.03);
+      color:var(--mid);
+      padding:10px 14px;
+      cursor:pointer;
+      font-family:var(--display);
+      font-weight:900;
+      letter-spacing:.04em;
+      transition:all .15s;
+    }
+    .btn:hover{border-color:rgba(0,255,136,.22);color:var(--text);transform:translateY(-1px)}
+    .btn.primary{background:var(--green);color:#060809;border-color:transparent;box-shadow:0 0 24px rgba(0,255,136,.18)}
+    .btn.primary:hover{transform:translateY(-1px)}
+    .btn.danger{border-color:rgba(255,77,106,.25);color:#fca5a5;background:rgba(255,77,106,.06)}
+    .btn:disabled{opacity:.35;cursor:default;transform:none}
 
-    .btn{border:none;cursor:pointer;border-radius:10px;font-family:var(--display);font-weight:900;letter-spacing:.04em;transition:all .15s}
-    .btnPrimary{background:var(--green);color:#060809;box-shadow:0 0 32px rgba(0,255,136,.3)}
-    .btnPrimary:hover{transform:translateY(-1px)}
-    .btnAlt{border:1px solid var(--amber);background:rgba(245,166,35,.08);color:var(--amber)}
-    .btnGhost{border:1px solid var(--border);background:transparent;color:var(--mid)}
-    .btnGhost:hover{border-color:rgba(0,255,136,.22);color:var(--text)}
-    .btn[disabled]{opacity:.35;cursor:default}
+    textarea, select, input{
+      width:100%;
+      border:1px solid rgba(255,255,255,.06);
+      background:var(--bg2);
+      color:var(--text);
+      border-radius:12px;
+      padding:12px;
+      font-family:var(--mono);
+      font-size:12px;
+      outline:none;
+    }
+    textarea{min-height:120px;resize:vertical;line-height:1.5}
 
-    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    @media(max-width:760px){.grid3{grid-template-columns:1fr}}
-    .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-    @media(max-width:760px){.grid2{grid-template-columns:1fr}}
-    .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-    @media(max-width:760px){.grid4{grid-template-columns:repeat(2,1fr)}}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+    @media(max-width:640px){.row{grid-template-columns:1fr}}
 
+    .hint{font-family:var(--mono);font-size:10px;color:var(--dim);line-height:1.55;margin-top:8px}
+    .hint b{color:var(--mid)}
+
+    .riskLegend{border:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02);border-radius:12px;padding:12px;margin-top:12px}
+    .riskLegend .t{font-family:var(--display);font-weight:900;font-size:14px;margin-bottom:6px}
+    .riskLegend .p{font-size:12px;color:var(--mid);line-height:1.55;margin-bottom:10px}
+    .riskLegend .chips{display:flex;gap:8px;flex-wrap:wrap}
     .chip{
-      padding:12px 10px;border-radius:10px;cursor:pointer;text-align:center;
-      border:1px solid var(--border);background:var(--bg1);transition:all .15s;user-select:none;
+      font-family:var(--mono);font-size:10px;
+      border:1px solid rgba(255,255,255,.06);
+      border-radius:999px;padding:6px 10px;color:var(--mid);
+      background:rgba(255,255,255,.02);
     }
-    .chip:hover{transform:translateY(-1px);border-color:rgba(0,255,136,.22)}
-    .chip.sel{border-color:var(--green);background:rgba(0,255,136,.07)}
-    .chip .label{font-size:11px;font-weight:600;color:var(--text)}
-    .chip.sel .label{color:var(--green)}
-    .chip .sub{font-family:var(--mono);font-size:8px;color:var(--dim);margin-top:2px}
 
-    .rowCard{
-      padding:14px 16px;border-radius:10px;cursor:pointer;border:1px solid var(--border);background:var(--bg1);
-      display:flex;align-items:center;gap:12px;transition:all .15s;user-select:none;
+    .packBox{
+      background:#050707;border:1px solid rgba(0,255,136,.12);
+      border-radius:12px;padding:12px;
+      font-family:var(--mono);font-size:11px;color:#a8c0a8;
+      white-space:pre-wrap;overflow-wrap:anywhere;
+      max-height:360px;overflow:auto;line-height:1.6;
     }
-    .rowCard:hover{transform:translateY(-1px);border-color:rgba(0,255,136,.22)}
-    .rowCard.sel{border-color:rgba(245,166,35,.5);background:rgba(245,166,35,.07)}
-    .rowCard .sub{font-family:var(--mono);font-size:9px;color:var(--dim)}
-
-    .muted{font-family:var(--mono);font-size:11px;color:var(--mid)}
-    .kicker{font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:.14em}
-    .title{font-family:var(--display);font-weight:900;letter-spacing:-.01em}
-
-    .spin{width:64px;height:64px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 28px}
-    .miniSteps{display:flex;flex-direction:column;gap:6px;text-align:left}
-    .miniStep{display:flex;align-items:center;gap:10px}
-    .miniDot{width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#060809;flex-shrink:0}
-
-    .packBanner{border:1px solid var(--border2);border-left:4px solid var(--green);border-radius:14px;padding:20px 24px;background:var(--bg1)}
-    .tag{font-family:var(--mono);font-size:9px;color:var(--green);background:rgba(0,255,136,.1);padding:3px 8px;border-radius:4px;letter-spacing:.1em}
-    .scoreBig{font-family:var(--display);font-weight:900;font-size:52px;line-height:1}
-    .meterRow{display:flex;align-items:center;gap:6px}
-    .meterLab{font-family:var(--mono);font-size:7px;color:var(--dim);width:80px;letter-spacing:.07em}
-    .meterBar{flex:1;height:3px;background:rgba(255,255,255,.05);border-radius:99px}
-    .meterFill{height:100%;border-radius:99px;transition:width 1s}
-
-    .claimBox{border:1px solid var(--border);border-radius:10px;padding:14px 16px;background:var(--bg1)}
-    .claimBox .h{font-family:var(--mono);font-size:8px;letter-spacing:.12em;color:var(--green);margin-bottom:5px}
-    .failBox{border:1px solid rgba(255,77,106,.15);border-radius:10px;padding:14px 16px;background:rgba(255,77,106,.04)}
-    .failBox .h{font-family:var(--mono);font-size:8px;letter-spacing:.12em;color:var(--red);margin-bottom:5px}
-    .failBox .t{font-family:var(--mono);font-size:11px;color:#fca5a5;line-height:1.65}
-
-    .riskLegend{border:1px solid var(--border);background:rgba(255,255,255,.02);border-radius:12px;padding:12px;margin:12px 0 14px}
-    .riskLegend .t{font-weight:900;font-size:13px;margin-bottom:6px;font-family:var(--display)}
-    .riskLegend .p{color:var(--mid);font-size:12px;line-height:1.55;margin-bottom:10px}
-    .riskLegend .row{display:flex;gap:8px;flex-wrap:wrap}
-    .riskLegend .chip2{font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--mid)}
-    .riskGuide{margin-top:10px;border-left:2px solid var(--blue);background:rgba(56,217,240,.06);border-radius:0 10px 10px 0;padding:10px 12px}
-    .riskGuide .h{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
-    .riskGuide .c{font-size:12px;line-height:1.55;color:var(--text)}
-
-    .stakeBtns{display:flex;gap:6px}
-    .stakeBtn{flex:1;padding:8px 0;border-radius:7px;border:none;cursor:pointer;font-family:var(--display);font-weight:900;font-size:14px;transition:all .15s}
-
-    .monoSmall{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.08em}
-    .legal{font-family:var(--mono);font-size:9px;color:var(--dim);text-align:center}
-    .copyRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-
-    .out{
-      margin-top:10px;background:#050707;border:1px solid rgba(0,255,136,.12);border-radius:12px;padding:12px;
-      font-family:var(--mono);font-size:10px;color:#a8c0a8;white-space:pre-wrap;overflow-wrap:anywhere;max-height:260px;overflow:auto;
+    .label{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+    .badge{
+      font-family:var(--mono);font-size:10px;
+      padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.07);
+      background:rgba(255,255,255,.02);color:var(--mid);
     }
+    .badge.green{color:var(--green);border-color:rgba(0,255,136,.22);background:rgba(0,255,136,.06)}
+    .badge.amber{color:var(--amber);border-color:rgba(245,166,35,.22);background:rgba(245,166,35,.06)}
+    .badge.red{color:#fca5a5;border-color:rgba(255,77,106,.22);background:rgba(255,77,106,.06)}
+
+    .steps{
+      display:flex;flex-direction:column;gap:8px;margin-top:10px;
+    }
+    .step{
+      display:flex;gap:10px;align-items:flex-start;
+      border:1px solid rgba(255,255,255,.04);
+      background:rgba(255,255,255,.02);
+      border-radius:12px;padding:10px 12px;
+    }
+    .snum{
+      width:18px;height:18px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(0,255,136,.15);color:var(--green);
+      font-family:var(--mono);font-size:10px;flex-shrink:0;margin-top:2px;
+    }
+    .sline{font-family:var(--mono);font-size:11px;color:var(--text);line-height:1.55}
+    .sline small{display:block;color:var(--mid);margin-top:2px}
+    .spin{
+      width:16px;height:16px;border-radius:50%;
+      border:2px solid rgba(255,255,255,.10);
+      border-top-color: var(--green);
+      animation: spin 1s linear infinite;
+      display:inline-block;
+      vertical-align:middle;
+      margin-right:8px;
+    }
+
+    .toast{
+      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background:rgba(6,8,9,.95);
+      border:1px solid rgba(0,255,136,.18);
+      color:var(--text);
+      padding:10px 12px;border-radius:12px;
+      font-family:var(--mono);font-size:11px;
+      display:none;z-index:99;
+    }
+
+    .fu{animation:fadeUp .45s ease both}
   </style>
 </head>
 
 <body>
-<div class="wrap">
   <div class="nav">
     <div class="brand">
       <div class="dot"></div>
-      <span>OPENLINE EXCHANGE</span>
+      <div class="brandName">OPENLINE · DISCOVERY MARKET</div>
     </div>
-    <div class="crumb" id="crumb">LIVE MARKET</div>
+    <div class="crumb" id="crumb">BUILD OPPORTUNITY PACK</div>
   </div>
 
-  <div class="ticker" aria-hidden="true">
-    <div class="tickerTrack" id="tickerTrack"></div>
+  <div class="wrap">
+    <div class="hero fu">
+      <div class="kicker">A positive pitch for the same mechanics</div>
+      <div class="h1">A market that funds discovery — not prediction.</div>
+      <div class="sub">
+        This demo shows the core loop: <b>Opportunity Pack</b> → <b>pre-registered falsifier</b> → <b>witnesses run cheapest-first</b> → <b>receipt emitted</b>.
+        No wallets. No logins. Just proof discipline.
+      </div>
+      <div class="pillRow">
+        <div class="pill"><b>1</b> Pack</div>
+        <div class="pill"><b>2</b> Falsifier</div>
+        <div class="pill"><b>3</b> Witnesses</div>
+        <div class="pill"><b>4</b> Receipt</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="card fu">
+        <div class="cardHead">
+          <div class="cardTitle">Input</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn" id="btnSample">Use sample</button>
+            <button class="btn primary" id="btnGenerate">Generate Pack</button>
+          </div>
+        </div>
+        <div class="cardBody">
+          <div class="label">Idea (one sentence)</div>
+          <textarea id="idea" placeholder="Example: A battery additive reduces impedance growth without increasing gas formation."></textarea>
+
+          <div class="row">
+            <div>
+              <div class="label" style="margin-top:10px">Domain</div>
+              <select id="domain">
+                <option value="agents">AI Agents</option>
+                <option value="batteries">Batteries</option>
+                <option value="co2">CO₂ Conversion</option>
+                <option value="synbio">Synthetic Biology</option>
+                <option value="materials">Materials</option>
+              </select>
+            </div>
+            <div>
+              <div class="label" style="margin-top:10px">Bounty (demo)</div>
+              <input id="bounty" type="number" min="50" step="50" value="500"/>
+            </div>
+          </div>
+
+          <div class="riskLegend">
+            <div class="t">What “cheat_risk” means</div>
+            <div class="p">Cheat risk = how easy it is to get a “win” that isn’t real. High risk means a result can look successful while secretly taking an easier path.</div>
+            <div class="chips">
+              <div class="chip"><b style="color:var(--green);font-family:var(--display)">LOW</b> — hard to fake</div>
+              <div class="chip"><b style="color:var(--amber);font-family:var(--display)">MED</b> — needs controls + replicate</div>
+              <div class="chip"><b style="color:var(--red);font-family:var(--display)">HIGH</b> — strict controls + outside verification</div>
+            </div>
+            <div class="hint"><b>Use it:</b> higher cheat risk means your first move is stronger falsifier + stricter witness order.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card fu">
+        <div class="cardHead">
+          <div class="cardTitle">Run</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <span class="badge" id="badgeState">idle</span>
+            <button class="btn danger" id="btnReset">Reset</button>
+          </div>
+        </div>
+        <div class="cardBody">
+          <div class="label">Autonomous run (simulated)</div>
+          <div class="steps" id="runSteps">
+            <div class="step"><div class="snum">1</div><div class="sline">Generate an Opportunity Pack.<small>Claim + falsifier + witnesses.</small></div></div>
+            <div class="step"><div class="snum">2</div><div class="sline">Run witnesses cheapest-first.<small>Origin → cheat suppression → stability → cost.</small></div></div>
+            <div class="step"><div class="snum">3</div><div class="sline">Emit a receipt.<small>openline.science.v1 (demo stub).</small></div></div>
+          </div>
+
+          <div class="btnRow" style="margin-top:12px">
+            <button class="btn" id="btnCopyPack" disabled>Copy Pack</button>
+            <button class="btn" id="btnCopyReceipt" disabled>Copy Receipt</button>
+            <a class="btn" href="https://github.com/terryncew/openline-idea-forge/issues/new" target="_blank" rel="noopener">Open GitHub Issue</a>
+            <button class="btn primary" id="btnRun" disabled>Run Witnesses</button>
+          </div>
+
+          <div class="hint" style="margin-top:10px">
+            This is the “Discovery Market” framing: the bounty pays for the <b>run</b>, and the falsifier prevents cheap talk.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fu" style="margin-top:14px">
+      <div class="cardHead">
+        <div class="cardTitle">Output</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge" id="badgeRisk">cheat_risk: —</span>
+          <span class="badge" id="badgeVerdict">verdict: —</span>
+        </div>
+      </div>
+      <div class="cardBody">
+        <div class="label">Opportunity Pack / Receipt (live)</div>
+        <div class="packBox" id="out">(generate to see output)</div>
+      </div>
+    </div>
   </div>
 
-  <div class="container">
-    <div id="progressHost"></div>
-    <div id="app"></div>
-  </div>
-</div>
+  <div class="toast" id="toast">Copied</div>
 
 <script>
 (() => {
-  const MARKET_STATS = {
-    activePacks: 84,
-    avgReturn: "2.3×",
-    totalStaked: "$48,200",
-    lastPayout: "$340",
-    passRate: "67%",
-    avgDays: 11,
-  };
-
-  const LIVE_FEED = [
-    { id: "OP-ARB-7F2A", domain: "Machine Learning", p: 0.84, payout: "$340", status: "SETTLED PASS" },
-    { id: "OP-ARB-3C9B", domain: "Synthetic Biology", p: 0.71, payout: "$180", status: "STAKED" },
-    { id: "OP-BIO-1A4D", domain: "Neuroscience", p: 0.62, payout: "$520", status: "OPEN" },
-    { id: "OP-ARB-8E2F", domain: "Robotics", p: 0.78, payout: "$210", status: "SETTLED PASS" },
-    { id: "OP-CHM-5D1A", domain: "Materials Science", p: 0.55, payout: "$890", status: "STAKED" },
-  ];
-
-  const INTEREST_DOMAINS = [
-    { key: "ai", icon: "🧠", label: "AI & Agents", sub: "LLMs, evals, alignment" },
-    { key: "bio", icon: "🧬", label: "Biology", sub: "Synbio, genomics, cells" },
-    { key: "climate", icon: "🌍", label: "Climate", sub: "Carbon, energy, materials" },
-    { key: "neuro", icon: "⚡", label: "Neuroscience", sub: "Cognition, brain, behavior" },
-    { key: "robotics", icon: "🤖", label: "Robotics", sub: "Autonomy, motion, sensing" },
-    { key: "pharma", icon: "💊", label: "Drug Discovery", sub: "Molecules, targets, trials" },
-    { key: "data", icon: "📈", label: "Data & Stats", sub: "Methods, inference, models" },
-    { key: "physics", icon: "🔭", label: "Physics", sub: "Quantum, materials, optics" },
-  ];
-
-  const ROLES = [
-    { key: "researcher", icon: "🧪", label: "I run experiments", sub: "I want to stake & test" },
-    { key: "investor", icon: "💸", label: "I back ideas", sub: "I want to bet on outcomes" },
-    { key: "builder", icon: "🛠", label: "I build things", sub: "I want problems to solve" },
-    { key: "curious", icon: "🧭", label: "Just exploring", sub: "Show me what's here" },
-  ];
-
-  const BUDGETS = [
-    { key: "low",  label: "$10–$50",  sub: "Test the waters" },
-    { key: "mid",  label: "$50–$250", sub: "Serious bet" },
-    { key: "high", label: "$250–$1k", sub: "Full position" },
-    { key: "xl",   label: "$1k+",     sub: "Lead the round" },
-  ];
-
-  const STEPS = ["Market", "Your Profile", "Finding Your Pack", "Your Opportunity", "Get In"];
+  const $ = (id) => document.getElementById(id);
 
   const state = {
-    step: 0, // 0..4
-    profile: { domains: [], role: null, budget: null },
     pack: null,
-    mode: null, // "bet" | "run"
+    receipt: null,
+    phase: "idle",   // idle | packed | running | done
+    lastView: "pack" // pack | receipt
   };
 
-  const $ = (id) => document.getElementById(id);
-  const esc = (s) => String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
-
-  function setCrumb(){
-    const label = state.step > 0 && STEPS[state.step] ? STEPS[state.step].toUpperCase() : "LIVE MARKET";
-    $("crumb").textContent = label;
+  function toast(msg){
+    const t = $("toast");
+    t.textContent = msg;
+    t.style.display = "block";
+    setTimeout(()=>t.style.display="none", 1100);
   }
 
-  function renderProgress(){
-    const host = $("progressHost");
-    if (state.step <= 0 || state.step >= 4) { host.innerHTML = ""; return; }
-    const stepIndex = state.step - 1;
-    const total = 3;
-    let bars = "";
-    for (let i=0;i<total;i++){
-      const flex = (i === stepIndex) ? 3 : 1;
-      const bg = (i <= stepIndex) ? "var(--green)" : "var(--bg3)";
-      const opacity = (i < stepIndex) ? 0.4 : 1;
-      bars += `<div class="bar" style="flex:${flex};background:${bg};opacity:${opacity}"></div>`;
-    }
-    host.innerHTML = `<div class="progress">${bars}</div>`;
+  function setBadge(el, text, cls){
+    const b = $(el);
+    b.className = "badge" + (cls ? " " + cls : "");
+    b.textContent = text;
   }
 
-  function statusDotColor(status){
-    if (status.includes("PASS")) return "var(--green)";
-    if (status === "STAKED") return "var(--amber)";
-    return "var(--blue)";
+  function esc(s){
+    return String(s ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;");
   }
 
-  function renderTicker(){
-    const track = $("tickerTrack");
-    const items = [...LIVE_FEED, ...LIVE_FEED];
-    track.innerHTML = items.map(item => `
-      <span class="tick">
-        <span style="width:6px;height:6px;border-radius:50%;background:${statusDotColor(item.status)};display:inline-block"></span>
-        <span>${esc(item.id)}</span>
-        <strong>${esc(item.domain)}</strong>
-        <strong style="color:${item.status.includes("PASS") ? "var(--green)" : "var(--text)"}">${esc(item.payout)}</strong>
-        <span class="pill" style="
-          background:${item.status.includes("PASS") ? "rgba(0,255,136,.12)" : item.status==="STAKED" ? "rgba(245,166,35,.1)" : "rgba(56,217,240,.1)"};
-          color:${item.status.includes("PASS") ? "var(--green)" : item.status==="STAKED" ? "var(--amber)" : "var(--blue)"};
-          border-color:rgba(255,255,255,.05)
-        ">${esc(item.status)}</span>
-      </span>
-    `).join("");
+  function nowId(domain){
+    const tag = (domain || "GEN").toUpperCase().slice(0,6);
+    const r = Math.random().toString(16).slice(2,6).toUpperCase();
+    const d = new Date();
+    const y = String(d.getFullYear()).slice(2);
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const da= String(d.getDate()).padStart(2,"0");
+    return `OP-${tag}-${y}${m}${da}-${r}`;
   }
 
-  function go(n){
-    state.step = n;
-    setCrumb();
-    renderProgress();
+  function computeCheatRisk(domain, ideaText){
+    const t = (ideaText||"").toLowerCase();
+    // heuristic: domains with common “shortcut pathways” are high unless idea is already tightly bounded
+    if (domain === "co2" || domain === "batteries") return "high";
+    if (domain === "agents") return (t.includes("held-out") || t.includes("false stop") || t.includes("regression")) ? "medium" : "high";
+    if (domain === "synbio") return "high";
+    if (domain === "materials") return "medium";
+    return "medium";
+  }
+
+  function guideForRisk(r){
+    if (r === "high") return "HIGH: assume it can fake a win. Do strict controls + independent verification first.";
+    if (r === "medium") return "MED: do controls + replicate. Watch for decay/side-effects. If replicate fails, stop.";
+    return "LOW: basic controls usually catch failure. Run cheap falsifier first, then extend window.";
+  }
+
+  function buildPack(){
+    const idea = ($("idea").value || "").trim();
+    const domain = $("domain").value;
+    const bounty = Math.max(50, parseInt($("bounty").value || "500", 10));
+    if (!idea) { toast("Add an idea first"); return; }
+
+    const cheat_risk = computeCheatRisk(domain, idea);
+    const id = nowId(domain);
+
+    // domain-flavored templates
+    const templates = {
+      agents: {
+        kpi: "cost-per-solved ↓ ≥30% with false stops ≤2%",
+        claim: `On held-out tasks, a bounded-loop governor reduces repeated-action burn by ≥30% while keeping false stops ≤2%.`,
+        falsifier: `FAIL if solved-rate drops OR false stops exceed 2% OR burn does not fall by ≥30%.`,
+        witnesses: [
+          ["W1_REPLAY","origin","hard","deterministic replay reproduces the outcome","outcome not reproducible under replay"],
+          ["W2_LOOP","cheat_suppression","hard","repeated signatures bounded within window","repetition exceeds bound — looping"],
+          ["W3_TESTS","stability","hard","regression suite passes","tests fail / regressions spike"],
+          ["W4_COST","cost_feasibility","soft","cost-per-solved stays within cap","overhead makes it unusable"]
+        ]
+      },
+      batteries: {
+        kpi: "CE +1%, impedance growth ↓, gas below threshold ≥100 cycles",
+        claim: `An additive improves Coulombic Efficiency by ≥1% and reduces impedance growth while keeping gas evolution below threshold over ≥100 cycles.`,
+        falsifier: `FAIL if replicate loses effect OR parasitics exceed bound OR CE gain disappears by cycle 100.`,
+        witnesses: [
+          ["W1_ORIGIN","origin","hard","effect replicates on separate build/batch","effect vanishes on replicate"],
+          ["W2_PARASITICS","cheat_suppression","hard","gas/EIS bounded","parasitics dominate"],
+          ["W3_STABILITY","stability","hard","CE + EIS within bounds ≥100 cycles","CE collapses or EIS runaway"],
+          ["W4_COST","cost_feasibility","soft","feasible and safe at scale","prohibitive or unsafe"]
+        ]
+      },
+      co2: {
+        kpi: "FE(CO) ≥90%, side reactions bounded, ≥10h time-on-stream",
+        claim: `A CO2RR setup holds FE to CO ≥90% while keeping side reactions below bound for ≥10 hours continuous operation.`,
+        falsifier: `FAIL if carbon balance does not close OR FE collapses before 10h OR side reactions dominate current.`,
+        witnesses: [
+          ["W1_CARBON","origin","hard","carbon balance closes","carbon balance does not close"],
+          ["W2_SIDE","cheat_suppression","hard","side reactions bounded at target current","side reaction dominates current"],
+          ["W3_TOS","stability","hard","stable time-on-stream ≥10h","rapid decay or deactivation"],
+          ["W4_DURABILITY","cost_feasibility","soft","durability acceptable at target scale","fast degradation or high replacement cost"]
+        ]
+      },
+      synbio: {
+        kpi: "target expression ↑, off-target bounded, replicate holds",
+        claim: `A construct increases target expression ≥2× while keeping off-target effects below bound across ≥3 independent replicates.`,
+        falsifier: `FAIL if effect disappears under replicate OR off-target exceeds bound OR measurement confounded by contamination.`,
+        witnesses: [
+          ["W1_ORIGIN","origin","hard","identity/sequence verified","identity uncertain / contamination likely"],
+          ["W2_OFFTARGET","cheat_suppression","hard","off-target bounded","off-target dominates or confounds"],
+          ["W3_REPL","stability","hard","replicate holds across ≥3 runs","effect fails to replicate"],
+          ["W4_COST","cost_feasibility","soft","feasible in standard lab loop","too expensive/slow for iteration"]
+        ]
+      },
+      materials: {
+        kpi: "property target met + stability window + replicate",
+        claim: `A candidate meets the target property threshold and remains stable under the stated operating window, replicating on an independent run.`,
+        falsifier: `FAIL if performance depends on a single batch OR stability window collapses OR property is a measurement artifact.`,
+        witnesses: [
+          ["W1_ORIGIN","origin","hard","structure verified + independent rerun","batch artifact / misidentification"],
+          ["W2_ARTIFACT","cheat_suppression","hard","controls rule out measurement artifact","artifact explains the result"],
+          ["W3_STAB","stability","hard","holds under operating window","degrades outside narrow conditions"],
+          ["W4_COST","cost_feasibility","soft","candidate is manufacturable","manufacturing cost dominates"]
+        ]
+      }
+    };
+
+    const t = templates[domain] || templates.agents;
+
+    // personalize claim/falsifier using the user’s idea as the top line
+    const pack = {
+      schema_version: "openline.science.v1",
+      kind: "opportunity_pack",
+      id,
+      domain,
+      bounty_usd: bounty,
+      idea,
+      cheat_risk: cheat_risk,
+      goal_kpi: t.kpi,
+      claim: t.claim,
+      falsifier: t.falsifier,
+      court_tests: t.witnesses.map(w => ({
+        id: w[0],
+        role: w[1],
+        hardness: w[2],
+        pass_condition: w[3],
+        fail_condition: w[4]
+      })),
+      guidance: guideForRisk(cheat_risk),
+      notes: "Static demo. Real version: adapters run witnesses, governor monitors drift, receipt is hashed+signed."
+    };
+
+    state.pack = pack;
+    state.receipt = null;
+    state.phase = "packed";
+    state.lastView = "pack";
     render();
-    window.scrollTo({top:0, behavior:"smooth"});
   }
 
-  function makePack(profile){
-    const domainNames = profile.domains.map(k => INTEREST_DOMAINS.find(d => d.key === k)?.label).filter(Boolean);
-    const sourceDomain = domainNames[0] || "Neuroscience";
-    const targetDomain = domainNames[1] || domainNames[0] || "Machine Learning";
+  function simulateRun(){
+    if (!state.pack) return;
+    state.phase = "running";
+    state.receipt = null;
+    state.lastView = "pack";
+    render();
 
-    const roleLabel = ROLES.find(r => r.key === profile.role)?.label || "I run experiments";
-    const budgetLabel = BUDGETS.find(b => b.key === profile.budget)?.label || "$50–$250";
-
-    const dCount = Math.max(1, profile.domains.length);
-    const roleBoost = profile.role === "researcher" ? 0.06 : profile.role === "builder" ? 0.04 : profile.role === "investor" ? 0.02 : 0.01;
-    const budgetBoost = profile.budget === "xl" ? 0.06 : profile.budget === "high" ? 0.04 : profile.budget === "mid" ? 0.02 : 0.01;
-    const base = 0.58 + Math.min(0.12, (dCount-1)*0.04) + roleBoost + budgetBoost;
-    const pSuccess = Math.max(0.45, Math.min(0.86, base));
-
-    const cheatRisk = pSuccess >= 0.78 ? "low" : pSuccess >= 0.62 ? "medium" : "high";
-    const multiplier = cheatRisk === "low" ? 1.8 : cheatRisk === "medium" ? 2.1 : 2.7;
-    const days = cheatRisk === "low" ? 7 : cheatRisk === "medium" ? 9 : 12;
-
-    const id = `OP-ARB-${Math.random().toString(16).slice(2,6).toUpperCase()}`;
-
-    const claim = `Translate a mechanism from ${sourceDomain} into ${targetDomain} and beat a baseline by ≥25% on a pre-registered metric within ${days} days.`;
-    const falsifier = `FAIL if: improvement < 25% OR cost exceeds 3× baseline OR the mechanism cannot be reproduced by an independent rerun.`;
-    const kpi = `≥25% improvement vs baseline`;
-
-    const whyYou = `You picked ${domainNames.join(", ") || "a domain"}. That’s enough context to spot shortcut pathways and write a real falsifier. Budget: ${budgetLabel}. Role: ${roleLabel}.`;
-
-    const witnesses = [
-      ["W1_TRANSLATION","origin","hard","mechanism definition is explicit + testable","mechanism is metaphor / cannot be operationalized"],
-      ["W2_BASELINE","cheat_suppression","hard","baseline is locked + measured before changes","baseline shifts / moving target"],
-      ["W3_MECHANISM","mechanism_fidelity","hard","effect persists under control + ablation","effect vanishes under control/ablation"],
-      ["W4_COST","cost_feasibility","soft","time+cost remain within cap","time+cost blow past cap"],
+    const steps = [
+      { key:"W1", text:"W1 (origin): verify identity + controls", ms: 650 },
+      { key:"W2", text:"W2 (cheat suppression): block shortcut pathway", ms: 750 },
+      { key:"W3", text:"W3 (stability): run longer window / replicate", ms: 850 },
+      { key:"W4", text:"W4 (cost): confirm feasibility under budget", ms: 650 },
     ];
 
-    const exec = Math.max(0.5, Math.min(0.92, 0.62 + (profile.role==="researcher"?0.12:0.06) + (profile.budget==="high"||profile.budget==="xl"?0.06:0.02)));
-    const mech = Math.max(0.45, Math.min(0.9, 0.6 + (dCount>=2?0.12:0.06)));
-    const costFit = Math.max(0.4, Math.min(0.9, 0.58 + (profile.budget==="xl"?0.2:profile.budget==="high"?0.12:profile.budget==="mid"?0.06:0.02)));
+    const risk = state.pack.cheat_risk;
+    // demo logic: higher cheat risk -> more likely to fail
+    const failProb = (risk === "high") ? 0.38 : (risk === "medium") ? 0.22 : 0.12;
+    const willFail = Math.random() < failProb;
+    const failAt = willFail ? (risk === "high" ? 1 + Math.floor(Math.random()*2) : 2 + Math.floor(Math.random()*2)) : -1;
 
-    const minStake = profile.budget==="low"?25 : profile.budget==="mid"?50 : profile.budget==="high"?250 : 500;
+    let i = 0;
+    const runLog = [];
+    const witnessResults = [];
 
-    return {
-      id, title: "Cross-domain mechanism translation",
-      domain: targetDomain, source_domain: sourceDomain,
-      claim, falsifier, kpi, cheat_risk: cheatRisk,
-      why_you: whyYou, witnesses,
-      executability: exec, mechanism_clarity: mech, cost_feasibility: costFit,
-      p_success: pSuccess,
-      min_stake: minStake,
-      expected_return_multiplier: multiplier,
-      time_to_result_days: days,
-    };
+    function tick(){
+      if (i >= steps.length){
+        const verdict = "PASS";
+        const receipt = makeReceipt(verdict, runLog, witnessResults);
+        state.receipt = receipt;
+        state.phase = "done";
+        state.lastView = "receipt";
+        render();
+        return;
+      }
+
+      const s = steps[i];
+      runLog.push({ ts: new Date().toISOString(), event: "RUN_WITNESS", witness: s.key, msg: s.text });
+
+      setRunStep(i, "running", s.text);
+
+      setTimeout(() => {
+        if (i === failAt){
+          const verdict = "FAIL";
+          const failMsg = `Failed at ${s.key}: ${state.pack.court_tests[i]?.fail_condition || "witness failed"}`;
+          runLog.push({ ts: new Date().toISOString(), event: "HALT", witness: s.key, msg: failMsg });
+          witnessResults.push({ witness: s.key, verdict: "FAIL", details: failMsg });
+
+          // mark remaining steps as skipped
+          setRunStep(i, "fail", failMsg);
+          for (let j=i+1;j<steps.length;j++) setRunStep(j, "skip", "skipped (halted)");
+
+          const receipt = makeReceipt(verdict, runLog, witnessResults);
+          state.receipt = receipt;
+          state.phase = "done";
+          state.lastView = "receipt";
+          render();
+          return;
+        } else {
+          const okMsg = `PASS: ${state.pack.court_tests[i]?.pass_condition || "witness passed"}`;
+          runLog.push({ ts: new Date().toISOString(), event: "WITNESS_PASS", witness: s.key, msg: okMsg });
+          witnessResults.push({ witness: s.key, verdict: "PASS", details: okMsg });
+          setRunStep(i, "pass", okMsg);
+          i++;
+          tick();
+        }
+      }, s.ms);
+    }
+
+    // rebuild steps UI with placeholders
+    renderRunSteps();
+    tick();
   }
 
-  function riskGuideText(pack){
-    if (!pack) return "Pick a pack to see the recommended proof discipline.";
-    if (pack.cheat_risk === "high") return "HIGH: assume it can fake a win. Strict controls first + outside verification.";
-    if (pack.cheat_risk === "medium") return "MED: controls + a replicate. Watch decay/side-effects. If replicate fails, stop.";
-    return "LOW: still test it, but basic controls usually catch failure. Run the cheap falsifier first.";
-  }
-
-  function packToIssue(pack, profile){
-    const domainNames = profile.domains.map(k => INTEREST_DOMAINS.find(d => d.key === k)?.label).filter(Boolean).join(", ") || "—";
-    const witnessLines = (pack.witnesses||[]).map(w =>
-      `- ${w[0]} (${w[1]}, ${w[2]}): PASS if ${w[3]}. FAIL if ${w[4]}.`
-    ).join("\n");
-
-    return `ID: ${pack.id}
-FLOW: exchange_onboarding_demo
-PROFILE:
-- domains: ${domainNames}
-- role: ${profile.role}
-- budget: ${profile.budget}
-
-PACK:
-- title: ${pack.title}
-- source_domain: ${pack.source_domain}
-- domain: ${pack.domain}
-- p_success: ${Math.round(pack.p_success*100)}%
-- cheat_risk: ${pack.cheat_risk}
-
-CLAIM:
-- ${pack.claim}
-
-FALSIFIER (kill conditions):
-- ${pack.falsifier}
-
-COURT TESTS:
-${witnessLines}
-
-RECEIPT_FAMILY:
-- openline.science.v1
-`;
-  }
-
-  function packToReceiptStub(pack){
-    return JSON.stringify({
-      receipt_family: "openline.science.v1",
-      kind: "opportunity_pack",
-      id: pack.id,
-      domain: pack.domain,
-      source_domain: pack.source_domain,
-      claim: pack.claim,
-      falsifier: pack.falsifier,
-      witnesses: pack.witnesses,
-      p_success: pack.p_success,
-      cheat_risk: pack.cheat_risk,
-      expected_return_multiplier: pack.expected_return_multiplier,
-      time_to_result_days: pack.time_to_result_days,
+  function makeReceipt(verdict, runLog, witnessResults){
+    // demo receipt stub: no real hashing/signing here
+    const r = {
+      schema_version: "openline.science.v1",
+      kind: "receipt",
+      receipt_id: `RCPT-${state.pack.id}-${Math.random().toString(16).slice(2,6).toUpperCase()}`,
+      pack_id: state.pack.id,
+      domain: state.pack.domain,
+      bounty_usd: state.pack.bounty_usd,
+      cheat_risk: state.pack.cheat_risk,
+      verdict,
+      witnesses: witnessResults,
+      run_log: runLog,
       sha256: "DEMO_ONLY__NO_SIGNATURE",
       timestamp: new Date().toISOString()
-    }, null, 2);
+    };
+    return r;
   }
 
-  function viewMarket(){
-    const app = $("app");
-    app.innerHTML = `
-      <div class="fu" style="max-width:760px;margin:0 auto;padding:40px 0 0">
-        <div class="fu" style="text-align:center;margin-bottom:48px">
-          <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px">
-            OpenLine Exchange · Live Market
-          </div>
-          <div style="font-family:var(--display);font-weight:900;font-size:clamp(52px,10vw,96px);line-height:1;color:var(--green);letter-spacing:-.02em;text-shadow:0 0 40px rgba(0,255,136,.4)">
-            ${esc(MARKET_STATS.totalStaked)}
-          </div>
-          <div style="font-family:var(--mono);font-size:11px;color:var(--mid);margin-top:8px">
-            currently staked across ${esc(MARKET_STATS.activePacks)} open packs
-          </div>
-        </div>
-
-        <div class="fu1 grid3" style="margin-bottom:32px">
-          ${[
-            { label:"AVG RETURN", value: MARKET_STATS.avgReturn, color:"var(--green)", sub:"per winning position" },
-            { label:"LAST PAYOUT", value: MARKET_STATS.lastPayout, color:"var(--amber)", sub:"ML eval pack · recently" },
-            { label:"PASS RATE", value: MARKET_STATS.passRate, color:"var(--blue)", sub:"of settled experiments" },
-          ].map(s => `
-            <div class="card" style="padding:18px 20px;text-align:center">
-              <div style="font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.12em;margin-bottom:8px">${esc(s.label)}</div>
-              <div style="font-family:var(--display);font-size:36px;font-weight:900;color:${s.color};line-height:1;margin-bottom:4px">${esc(s.value)}</div>
-              <div style="font-family:var(--mono);font-size:9px;color:var(--mid)">${esc(s.sub)}</div>
-            </div>
-          `).join("")}
-        </div>
-
-        <div class="fu3" style="text-align:center">
-          <div class="muted" style="margin-bottom:16px">We’ll match you to a pack for your background and tolerance.</div>
-          <button class="btn btnPrimary" id="btnStart" style="padding:16px 40px;font-size:18px">FIND MY PACK →</button>
-          <div class="monoSmall" style="margin-top:10px">takes ~60 seconds · no wallet needed to explore</div>
-        </div>
-      </div>
+  function renderRunSteps(){
+    const box = $("runSteps");
+    box.innerHTML = `
+      <div class="step"><div class="snum">1</div><div class="sline">Generated Opportunity Pack.<small>Claim + falsifier + witnesses locked.</small></div></div>
+      <div class="step" data-rstep="0"><div class="snum">2</div><div class="sline"><span class="spin"></span>W1 pending…<small>origin</small></div></div>
+      <div class="step" data-rstep="1"><div class="snum">3</div><div class="sline">W2 pending…<small>cheat suppression</small></div></div>
+      <div class="step" data-rstep="2"><div class="snum">4</div><div class="sline">W3 pending…<small>stability</small></div></div>
+      <div class="step" data-rstep="3"><div class="snum">5</div><div class="sline">W4 pending…<small>cost</small></div></div>
+      <div class="step"><div class="snum">6</div><div class="sline">Receipt pending…<small>openline.science.v1</small></div></div>
     `;
-    $("btnStart").onclick = () => go(1);
   }
 
-  function viewProfile(){
-    const p = state.profile;
-    const app = $("app");
+  function setRunStep(i, mode, text){
+    const el = document.querySelector(`[data-rstep="${i}"] .sline`);
+    if (!el) return;
+    const color = mode==="pass" ? "var(--green)" : mode==="fail" ? "var(--red)" : mode==="skip" ? "var(--dim)" : "var(--text)";
+    const lead = mode==="running" ? `<span class="spin"></span>` : mode==="pass" ? "✓ " : mode==="fail" ? "✕ " : mode==="skip" ? "— " : "";
+    el.innerHTML = `${lead}<span style="color:${color}">${esc(text)}</span>`;
+  }
 
-    const domainsHtml = INTEREST_DOMAINS.map(d => {
-      const sel = p.domains.includes(d.key);
-      return `
-        <div class="chip ${sel?"sel":""}" data-domain="${esc(d.key)}">
-          <div style="font-size:20px;margin-bottom:5px">${esc(d.icon)}</div>
-          <div class="label">${esc(d.label)}</div>
-          <div class="sub">${esc(d.sub)}</div>
-        </div>
+  function render(){
+    const packed = !!state.pack;
+    const done = !!state.receipt;
+
+    // badges
+    $("badgeState").textContent = state.phase;
+    $("badgeState").className = "badge " + (state.phase==="done" ? (state.receipt?.verdict==="PASS" ? "green" : "red") : (state.phase==="running" ? "amber" : ""));
+    $("btnRun").disabled = !packed || state.phase==="running";
+    $("btnCopyPack").disabled = !packed;
+    $("btnCopyReceipt").disabled = !done;
+    $("btnGenerate").disabled = state.phase==="running";
+
+    // risk/verdict
+    setBadge("badgeRisk", packed ? `cheat_risk: ${state.pack.cheat_risk}` : "cheat_risk: —",
+      packed ? (state.pack.cheat_risk==="high"?"red":state.pack.cheat_risk==="medium"?"amber":"green") : "");
+    setBadge("badgeVerdict", done ? `verdict: ${state.receipt.verdict}` : "verdict: —",
+      done ? (state.receipt.verdict==="PASS"?"green":"red") : "");
+
+    // output
+    const out = $("out");
+    if (!packed){
+      out.textContent = "(generate to see output)";
+      return;
+    }
+    if (state.lastView === "receipt" && done){
+      out.textContent = JSON.stringify(state.receipt, null, 2);
+    } else {
+      out.textContent = JSON.stringify(state.pack, null, 2);
+    }
+
+    // run steps
+    if (state.phase === "idle"){
+      // leave default
+    } else if (state.phase === "packed"){
+      $("runSteps").innerHTML = `
+        <div class="step"><div class="snum">1</div><div class="sline">Pack locked.<small>${esc(state.pack.id)} · bounty $${state.pack.bounty_usd}</small></div></div>
+        <div class="step"><div class="snum">2</div><div class="sline">Falsifier pre-registered.<small>${esc(state.pack.falsifier)}</small></div></div>
+        <div class="step"><div class="snum">3</div><div class="sline">Witness order set (cheap → strict).<small>${esc(state.pack.guidance)}</small></div></div>
       `;
-    }).join("");
-
-    const rolesHtml = ROLES.map(r => {
-      const sel = p.role === r.key;
-      return `
-        <div class="rowCard ${sel?"sel":""}" data-role="${esc(r.key)}">
-          <span style="font-size:22px">${esc(r.icon)}</span>
-          <div>
-            <div class="title" style="font-size:13px;font-weight:600;color:${sel?"var(--amber)":"var(--text)"}">${esc(r.label)}</div>
-            <div class="sub">${esc(r.sub)}</div>
-          </div>
-        </div>
+    } else if (state.phase === "running"){
+      renderRunSteps();
+    } else if (state.phase === "done"){
+      const v = state.receipt?.verdict || "—";
+      const vColor = v==="PASS" ? "var(--green)" : "var(--red)";
+      $("runSteps").innerHTML = `
+        <div class="step"><div class="snum">1</div><div class="sline">Pack executed.<small>${esc(state.pack.id)}</small></div></div>
+        <div class="step"><div class="snum">2</div><div class="sline">Receipt emitted.<small style="color:${vColor}">VERDICT: ${esc(v)}</small></div></div>
+        <div class="step"><div class="snum">3</div><div class="sline">Copy it into a GitHub Issue.<small>That’s the public record move.</small></div></div>
       `;
-    }).join("");
+    }
+  }
 
-    const budgetsHtml = BUDGETS.map(b => {
-      const sel = p.budget === b.key;
-      return `
-        <div class="chip ${sel?"sel":""}" data-budget="${esc(b.key)}" style="
-          border-color:${sel?"rgba(56,217,240,.5)":"var(--border)"};
-          background:${sel?"rgba(56,217,240,.06)":"var(--bg1)"};
-        ">
-          <div style="font-family:var(--display);font-weight:800;font-size:18px;color:${sel?"var(--blue)":"var(--text)"}">${esc(b.label)}</div>
-          <div class="sub">${esc(b.sub)}</div>
-        </div>
-      `;
-    }).join("");
+  async function copyText(text){
+    try{
+      await navigator.clipboard.writeText(text);
+      toast("Copied");
+    }catch(e){
+      toast("Copy failed (select manually)");
+    }
+  }
 
-    const canContinue = p.domains.length>0 && !!p.role && !!p.budget;
+  $("btnSample").onclick = () => {
+    $("idea").value = "A battery additive reduces impedance growth without increasing gas formation.";
+    $("domain").value = "batteries";
+    $("bounty").value = "750";
+    toast("Sample loaded");
+  };
 
-    app.innerHTML = `
-      <div style="max-width:680px;margin:0 auto;padding:32px 0 0">
-        <div class="fu"
+  $("btnGenerate").onclick = () => buildPack();
+
+  $("btnRun").onclick = () => simulateRun();
+
+  $("btnCopyPack").onclick = () => {
+    if (!state.pack) return;
+    state.lastView = "pack";
+    render();
+    copyText(JSON.stringify(state.pack, null, 2));
+  };
+
+  $("btnCopyReceipt").onclick = () => {
+    if (!state.receipt) return;
+    state.lastView = "receipt";
+    render();
+    copyText(JSON.stringify(state.receipt, null, 2));
+  };
+
+  $("btnReset").onclick = () => {
+    state.pack = null;
+    state.receipt = null;
+    state.phase = "idle";
+    state.lastView = "pack";
+    $("out").textContent = "(generate to see output)";
+    setBadge("badgeRisk","cheat_risk: —","");
+    setBadge("badgeVerdict","verdict: —","");
+    $("runSteps").innerHTML = `
+      <div class="step"><div class="snum">1</div><div class="sline">Generate an Opportunity Pack.<small>Claim + falsifier + witnesses.</small></div></div>
+      <div class="step"><div class="snum">2</div><div class="sline">Run witnesses cheapest-first.<small>Origin → cheat suppression → stability → cost.</small></div></div>
+      <div class="step"><div class="snum">3</div><div class="sline">Emit a receipt.<small>openline.science.v1 (demo stub).</small></div></div>
+    `;
+    render();
+    toast("Reset");
+  };
+
+  renderTicker();
+  render();
+})();
+</script>
+</body>
+</html>
