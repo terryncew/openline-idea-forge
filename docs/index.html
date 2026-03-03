@@ -19,11 +19,10 @@
       --bg:#060809; --bg1:#0b0e11; --bg2:#111519; --bg3:#171c21;
       --border:rgba(0,255,136,.08); --border2:rgba(0,255,136,.2);
       --text:#c8d8c0; --dim:#3a4a3a; --mid:#6a8a6a;
-      --green:#00ff88; --green2:rgba(0,255,136,.12);
-      --amber:#f5a623; --red:#ff4d6a; --blue:#38d9f0;
-      --mono:'JetBrains Mono', monospace;
-      --display:'Barlow Condensed', sans-serif;
-      --body:'DM Sans', sans-serif;
+      --green:#00ff88; --amber:#f5a623; --red:#ff4d6a; --blue:#38d9f0;
+      --mono:'JetBrains Mono', ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --display:'Barlow Condensed', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      --body:'DM Sans', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
     }
     html{scroll-behavior:smooth}
     body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--body);overflow-x:hidden}
@@ -36,7 +35,6 @@
     @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
     @keyframes spin{to{transform:rotate(360deg)}}
-    @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(0,255,136,0)}50%{box-shadow:0 0 20px 4px rgba(0,255,136,.15)}}
 
     .wrap{min-height:100vh}
     .nav{
@@ -47,26 +45,15 @@
     }
     .brand{display:flex;align-items:center;gap:8px}
     .dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
-    .brand span{
-      font-family:var(--display);font-size:18px;font-weight:900;letter-spacing:.06em
-    }
-    .crumb{
-      font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.1em;
-      text-transform:uppercase;
-    }
+    .brand span{font-family:var(--display);font-size:18px;font-weight:900;letter-spacing:.06em}
+    .crumb{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
 
     .ticker{
       overflow:hidden;border-bottom:1px solid var(--border);
       background:rgba(0,255,136,.03);padding:5px 0;
     }
-    .tickerTrack{
-      display:inline-flex;white-space:nowrap;
-      animation:ticker 25s linear infinite;
-    }
-    .tick{
-      display:inline-flex;align-items:center;gap:8px;margin-right:40px;
-      font-family:var(--mono);font-size:9px;color:var(--mid);
-    }
+    .tickerTrack{display:inline-flex;white-space:nowrap;animation:ticker 25s linear infinite}
+    .tick{display:inline-flex;align-items:center;gap:8px;margin-right:40px;font-family:var(--mono);font-size:9px;color:var(--mid)}
     .tick strong{color:var(--text);font-weight:600}
     .pill{
       padding:2px 8px;border-radius:4px;font-size:8px;font-weight:700;
@@ -84,29 +71,13 @@
     .progress{display:flex;gap:4px;margin:24px 0 0}
     .bar{height:3px;border-radius:99px;background:var(--bg3);transition:all .4s ease}
 
-    .card{
-      background:var(--bg1);
-      border:1px solid var(--border);
-      border-radius:12px;
-    }
+    .card{background:var(--bg1);border:1px solid var(--border);border-radius:12px}
 
-    .btn{
-      border:none;cursor:pointer;border-radius:10px;
-      font-family:var(--display);font-weight:900;letter-spacing:.04em;
-      transition:all .15s;
-    }
-    .btnPrimary{
-      background:var(--green);color:#060809;
-      box-shadow:0 0 32px rgba(0,255,136,.3);
-    }
+    .btn{border:none;cursor:pointer;border-radius:10px;font-family:var(--display);font-weight:900;letter-spacing:.04em;transition:all .15s}
+    .btnPrimary{background:var(--green);color:#060809;box-shadow:0 0 32px rgba(0,255,136,.3)}
     .btnPrimary:hover{transform:translateY(-1px)}
-    .btnAlt{
-      border:1px solid var(--amber);background:rgba(245,166,35,.08);
-      color:var(--amber);
-    }
-    .btnGhost{
-      border:1px solid var(--border);background:transparent;color:var(--mid);
-    }
+    .btnAlt{border:1px solid var(--amber);background:rgba(245,166,35,.08);color:var(--amber)}
+    .btnGhost{border:1px solid var(--border);background:transparent;color:var(--mid)}
     .btnGhost:hover{border-color:rgba(0,255,136,.22);color:var(--text)}
     .btn[disabled]{opacity:.35;cursor:default}
 
@@ -119,8 +90,7 @@
 
     .chip{
       padding:12px 10px;border-radius:10px;cursor:pointer;text-align:center;
-      border:1px solid var(--border);background:var(--bg1);transition:all .15s;
-      user-select:none;
+      border:1px solid var(--border);background:var(--bg1);transition:all .15s;user-select:none;
     }
     .chip:hover{transform:translateY(-1px);border-color:rgba(0,255,136,.22)}
     .chip.sel{border-color:var(--green);background:rgba(0,255,136,.07)}
@@ -129,42 +99,24 @@
     .chip .sub{font-family:var(--mono);font-size:8px;color:var(--dim);margin-top:2px}
 
     .rowCard{
-      padding:14px 16px;border-radius:10px;cursor:pointer;
-      border:1px solid var(--border);background:var(--bg1);
-      display:flex;align-items:center;gap:12px;transition:all .15s;
+      padding:14px 16px;border-radius:10px;cursor:pointer;border:1px solid var(--border);background:var(--bg1);
+      display:flex;align-items:center;gap:12px;transition:all .15s;user-select:none;
     }
     .rowCard:hover{transform:translateY(-1px);border-color:rgba(0,255,136,.22)}
     .rowCard.sel{border-color:rgba(245,166,35,.5);background:rgba(245,166,35,.07)}
-    .rowCard .title{font-size:13px;font-weight:600}
     .rowCard .sub{font-family:var(--mono);font-size:9px;color:var(--dim)}
 
     .muted{font-family:var(--mono);font-size:11px;color:var(--mid)}
     .kicker{font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:.14em}
     .title{font-family:var(--display);font-weight:900;letter-spacing:-.01em}
-    .hr{height:1px;background:rgba(255,255,255,.04)}
-    .spin{
-      width:64px;height:64px;border:2px solid var(--border);
-      border-top-color:var(--green);border-radius:50%;
-      animation:spin 1s linear infinite;margin:0 auto 28px;
-    }
+
+    .spin{width:64px;height:64px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 28px}
     .miniSteps{display:flex;flex-direction:column;gap:6px;text-align:left}
     .miniStep{display:flex;align-items:center;gap:10px}
-    .miniDot{
-      width:14px;height:14px;border-radius:50%;
-      display:flex;align-items:center;justify-content:center;
-      font-size:8px;color:#060809;flex-shrink:0
-    }
+    .miniDot{width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;color:#060809;flex-shrink:0}
 
-    .packBanner{
-      border:1px solid var(--border2);
-      border-left:4px solid var(--green);
-      border-radius:14px;padding:20px 24px;background:var(--bg1);
-    }
-    .tag{
-      font-family:var(--mono);font-size:9px;color:var(--green);
-      background:rgba(0,255,136,.1);padding:3px 8px;border-radius:4px;
-      letter-spacing:.1em
-    }
+    .packBanner{border:1px solid var(--border2);border-left:4px solid var(--green);border-radius:14px;padding:20px 24px;background:var(--bg1)}
+    .tag{font-family:var(--mono);font-size:9px;color:var(--green);background:rgba(0,255,136,.1);padding:3px 8px;border-radius:4px;letter-spacing:.1em}
     .scoreBig{font-family:var(--display);font-weight:900;font-size:52px;line-height:1}
     .meterRow{display:flex;align-items:center;gap:6px}
     .meterLab{font-family:var(--mono);font-size:7px;color:var(--dim);width:80px;letter-spacing:.07em}
@@ -177,21 +129,25 @@
     .failBox .h{font-family:var(--mono);font-size:8px;letter-spacing:.12em;color:var(--red);margin-bottom:5px}
     .failBox .t{font-family:var(--mono);font-size:11px;color:#fca5a5;line-height:1.65}
 
+    .riskLegend{border:1px solid var(--border);background:rgba(255,255,255,.02);border-radius:12px;padding:12px;margin:12px 0 14px}
+    .riskLegend .t{font-weight:900;font-size:13px;margin-bottom:6px;font-family:var(--display)}
+    .riskLegend .p{color:var(--mid);font-size:12px;line-height:1.55;margin-bottom:10px}
+    .riskLegend .row{display:flex;gap:8px;flex-wrap:wrap}
+    .riskLegend .chip2{font-family:var(--mono);font-size:10px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.02);color:var(--mid)}
+    .riskGuide{margin-top:10px;border-left:2px solid var(--blue);background:rgba(56,217,240,.06);border-radius:0 10px 10px 0;padding:10px 12px}
+    .riskGuide .h{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
+    .riskGuide .c{font-size:12px;line-height:1.55;color:var(--text)}
+
     .stakeBtns{display:flex;gap:6px}
-    .stakeBtn{
-      flex:1;padding:8px 0;border-radius:7px;border:none;cursor:pointer;
-      font-family:var(--display);font-weight:900;font-size:14px;transition:all .15s
-    }
+    .stakeBtn{flex:1;padding:8px 0;border-radius:7px;border:none;cursor:pointer;font-family:var(--display);font-weight:900;font-size:14px;transition:all .15s}
 
     .monoSmall{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.08em}
     .legal{font-family:var(--mono);font-size:9px;color:var(--dim);text-align:center}
     .copyRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+
     .out{
-      margin-top:10px;
-      background:#050707;border:1px solid rgba(0,255,136,.12);
-      border-radius:12px;padding:12px;
-      font-family:var(--mono);font-size:10px;color:#a8c0a8;white-space:pre-wrap;overflow-wrap:anywhere;
-      max-height:260px;overflow:auto;
+      margin-top:10px;background:#050707;border:1px solid rgba(0,255,136,.12);border-radius:12px;padding:12px;
+      font-family:var(--mono);font-size:10px;color:#a8c0a8;white-space:pre-wrap;overflow-wrap:anywhere;max-height:260px;overflow:auto;
     }
   </style>
 </head>
@@ -218,7 +174,6 @@
 
 <script>
 (() => {
-  // ───────────────────────── Data (demo) ─────────────────────────
   const MARKET_STATS = {
     activePacks: 84,
     avgReturn: "2.3×",
@@ -240,7 +195,7 @@
     { key: "ai", icon: "🧠", label: "AI & Agents", sub: "LLMs, evals, alignment" },
     { key: "bio", icon: "🧬", label: "Biology", sub: "Synbio, genomics, cells" },
     { key: "climate", icon: "🌍", label: "Climate", sub: "Carbon, energy, materials" },
-    { key: "neuro", icon: "🧠", label: "Neuroscience", sub: "Cognition, brain, behavior" },
+    { key: "neuro", icon: "⚡", label: "Neuroscience", sub: "Cognition, brain, behavior" },
     { key: "robotics", icon: "🤖", label: "Robotics", sub: "Autonomy, motion, sensing" },
     { key: "pharma", icon: "💊", label: "Drug Discovery", sub: "Molecules, targets, trials" },
     { key: "data", icon: "📈", label: "Data & Stats", sub: "Methods, inference, models" },
@@ -257,13 +212,12 @@
   const BUDGETS = [
     { key: "low",  label: "$10–$50",  sub: "Test the waters" },
     { key: "mid",  label: "$50–$250", sub: "Serious bet" },
-    { key: "high", label: "$250–$1k",  sub: "Full position" },
+    { key: "high", label: "$250–$1k", sub: "Full position" },
     { key: "xl",   label: "$1k+",     sub: "Lead the round" },
   ];
 
   const STEPS = ["Market", "Your Profile", "Finding Your Pack", "Your Opportunity", "Get In"];
 
-  // ───────────────────────── State ─────────────────────────
   const state = {
     step: 0, // 0..4
     profile: { domains: [], role: null, budget: null },
@@ -271,7 +225,6 @@
     mode: null, // "bet" | "run"
   };
 
-  // ───────────────────────── Helpers ─────────────────────────
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
 
@@ -327,7 +280,6 @@
     window.scrollTo({top:0, behavior:"smooth"});
   }
 
-  // Deterministic pack generator (no API calls; works on GitHub Pages)
   function makePack(profile){
     const domainNames = profile.domains.map(k => INTEREST_DOMAINS.find(d => d.key === k)?.label).filter(Boolean);
     const sourceDomain = domainNames[0] || "Neuroscience";
@@ -336,7 +288,6 @@
     const roleLabel = ROLES.find(r => r.key === profile.role)?.label || "I run experiments";
     const budgetLabel = BUDGETS.find(b => b.key === profile.budget)?.label || "$50–$250";
 
-    // cheap pseudo-scoring
     const dCount = Math.max(1, profile.domains.length);
     const roleBoost = profile.role === "researcher" ? 0.06 : profile.role === "builder" ? 0.04 : profile.role === "investor" ? 0.02 : 0.01;
     const budgetBoost = profile.budget === "xl" ? 0.06 : profile.budget === "high" ? 0.04 : profile.budget === "mid" ? 0.02 : 0.01;
@@ -349,12 +300,11 @@
 
     const id = `OP-ARB-${Math.random().toString(16).slice(2,6).toUpperCase()}`;
 
-    // Concrete-ish claim templates (domain flavored)
     const claim = `Translate a mechanism from ${sourceDomain} into ${targetDomain} and beat a baseline by ≥25% on a pre-registered metric within ${days} days.`;
     const falsifier = `FAIL if: improvement < 25% OR cost exceeds 3× baseline OR the mechanism cannot be reproduced by an independent rerun.`;
     const kpi = `≥25% improvement vs baseline`;
 
-    const whyYou = `You picked ${domainNames.join(", ") || "a domain"}. That’s enough context to spot the shortcut pathways and write a real falsifier. Budget: ${budgetLabel}. Role: ${roleLabel}.`;
+    const whyYou = `You picked ${domainNames.join(", ") || "a domain"}. That’s enough context to spot shortcut pathways and write a real falsifier. Budget: ${budgetLabel}. Role: ${roleLabel}.`;
 
     const witnesses = [
       ["W1_TRANSLATION","origin","hard","mechanism definition is explicit + testable","mechanism is metaphor / cannot be operationalized"],
@@ -366,7 +316,6 @@
     const exec = Math.max(0.5, Math.min(0.92, 0.62 + (profile.role==="researcher"?0.12:0.06) + (profile.budget==="high"||profile.budget==="xl"?0.06:0.02)));
     const mech = Math.max(0.45, Math.min(0.9, 0.6 + (dCount>=2?0.12:0.06)));
     const costFit = Math.max(0.4, Math.min(0.9, 0.58 + (profile.budget==="xl"?0.2:profile.budget==="high"?0.12:profile.budget==="mid"?0.06:0.02)));
-    const priorArt = Math.max(0.2, Math.min(0.8, 0.28 + (dCount>=2?0.08:0.02)));
 
     const minStake = profile.budget==="low"?25 : profile.budget==="mid"?50 : profile.budget==="high"?250 : 500;
 
@@ -375,12 +324,19 @@
       domain: targetDomain, source_domain: sourceDomain,
       claim, falsifier, kpi, cheat_risk: cheatRisk,
       why_you: whyYou, witnesses,
-      executability: exec, mechanism_clarity: mech, cost_feasibility: costFit, prior_art_density: priorArt,
+      executability: exec, mechanism_clarity: mech, cost_feasibility: costFit,
       p_success: pSuccess,
       min_stake: minStake,
       expected_return_multiplier: multiplier,
       time_to_result_days: days,
     };
+  }
+
+  function riskGuideText(pack){
+    if (!pack) return "Pick a pack to see the recommended proof discipline.";
+    if (pack.cheat_risk === "high") return "HIGH: assume it can fake a win. Strict controls first + outside verification.";
+    if (pack.cheat_risk === "medium") return "MED: controls + a replicate. Watch decay/side-effects. If replicate fails, stop.";
+    return "LOW: still test it, but basic controls usually catch failure. Run the cheap falsifier first.";
   }
 
   function packToIssue(pack, profile){
@@ -390,7 +346,7 @@
     ).join("\n");
 
     return `ID: ${pack.id}
-FLOW: onboarding_demo
+FLOW: exchange_onboarding_demo
 PROFILE:
 - domains: ${domainNames}
 - role: ${profile.role}
@@ -418,7 +374,6 @@ RECEIPT_FAMILY:
   }
 
   function packToReceiptStub(pack){
-    // stub receipt (static demo). In real version, this is hashed+signed.
     return JSON.stringify({
       receipt_family: "openline.science.v1",
       kind: "opportunity_pack",
@@ -432,13 +387,11 @@ RECEIPT_FAMILY:
       cheat_risk: pack.cheat_risk,
       expected_return_multiplier: pack.expected_return_multiplier,
       time_to_result_days: pack.time_to_result_days,
-      // demo hash placeholder
       sha256: "DEMO_ONLY__NO_SIGNATURE",
       timestamp: new Date().toISOString()
     }, null, 2);
   }
 
-  // ───────────────────────── Views ─────────────────────────
   function viewMarket(){
     const app = $("app");
     app.innerHTML = `
@@ -447,11 +400,9 @@ RECEIPT_FAMILY:
           <div style="font-family:var(--mono);font-size:10px;color:var(--green);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px">
             OpenLine Exchange · Live Market
           </div>
-          <div style="
-            font-family:var(--display);font-weight:900;font-size:clamp(52px,10vw,96px);
-            line-height:1;color:var(--green);letter-spacing:-.02em;
-            text-shadow:0 0 40px rgba(0,255,136,.4)
-          ">${esc(MARKET_STATS.totalStaked)}</div>
+          <div style="font-family:var(--display);font-weight:900;font-size:clamp(52px,10vw,96px);line-height:1;color:var(--green);letter-spacing:-.02em;text-shadow:0 0 40px rgba(0,255,136,.4)">
+            ${esc(MARKET_STATS.totalStaked)}
+          </div>
           <div style="font-family:var(--mono);font-size:11px;color:var(--mid);margin-top:8px">
             currently staked across ${esc(MARKET_STATS.activePacks)} open packs
           </div>
@@ -471,29 +422,6 @@ RECEIPT_FAMILY:
           `).join("")}
         </div>
 
-        <div class="fu2 card" style="overflow:hidden;margin-bottom:32px">
-          <div style="padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-            <span style="width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite"></span>
-            <span style="font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:.1em">LIVE SETTLEMENTS</span>
-          </div>
-          ${LIVE_FEED.slice(0,4).map((item,i)=>`
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;${i<3?"border-bottom:1px solid rgba(255,255,255,.03)":"border-bottom:none"}">
-              <div style="display:flex;align-items:center;gap:12px">
-                <span style="font-family:var(--mono);font-size:9px;color:var(--mid)">${esc(item.id)}</span>
-                <span style="font-size:12px;color:var(--text)">${esc(item.domain)}</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:16px">
-                <span style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--green)">${Math.round(item.p*100)}%</span>
-                <span style="font-family:var(--mono);font-size:12px;font-weight:700;color:${item.status.includes("PASS")?"var(--green)":"var(--text)"}">${esc(item.payout)}</span>
-                <span class="pill" style="
-                  background:${item.status.includes("PASS") ? "rgba(0,255,136,.12)" : item.status==="STAKED" ? "rgba(245,166,35,.1)" : "rgba(56,217,240,.1)"};
-                  color:${item.status.includes("PASS") ? "var(--green)" : item.status==="STAKED" ? "var(--amber)" : "var(--blue)"};
-                ">${esc(item.status)}</span>
-              </div>
-            </div>
-          `).join("")}
-        </div>
-
         <div class="fu3" style="text-align:center">
           <div class="muted" style="margin-bottom:16px">We’ll match you to a pack for your background and tolerance.</div>
           <button class="btn btnPrimary" id="btnStart" style="padding:16px 40px;font-size:18px">FIND MY PACK →</button>
@@ -501,7 +429,6 @@ RECEIPT_FAMILY:
         </div>
       </div>
     `;
-
     $("btnStart").onclick = () => go(1);
   }
 
@@ -550,234 +477,4 @@ RECEIPT_FAMILY:
 
     app.innerHTML = `
       <div style="max-width:680px;margin:0 auto;padding:32px 0 0">
-        <div class="fu" style="margin-bottom:32px">
-          <div class="kicker">STEP 1 OF 2 · YOUR PROFILE</div>
-          <div class="title" style="font-size:36px;margin:8px 0 6px">What do you know?</div>
-          <div class="muted">We’ll match a pack that fits. No blank boxes.</div>
-        </div>
-
-        <div class="fu1" style="margin-bottom:24px">
-          <div class="monoSmall" style="color:var(--dim);letter-spacing:.12em;margin-bottom:10px">YOUR DOMAIN(S) — pick all that apply</div>
-          <div class="grid4" id="domainsGrid">${domainsHtml}</div>
-        </div>
-
-        <div class="fu2" style="margin-bottom:24px">
-          <div class="monoSmall" style="color:var(--dim);letter-spacing:.12em;margin-bottom:10px">HOW DO YOU WANT TO PARTICIPATE?</div>
-          <div class="grid2" id="rolesGrid">${rolesHtml}</div>
-        </div>
-
-        <div class="fu3" style="margin-bottom:28px">
-          <div class="monoSmall" style="color:var(--dim);letter-spacing:.12em;margin-bottom:10px">YOUR POSITION SIZE</div>
-          <div class="grid4" id="budgetsGrid">${budgetsHtml}</div>
-        </div>
-
-        <button class="btn ${canContinue?"btnPrimary":"btnGhost"}" id="btnNext" ${canContinue?"":"disabled"} style="width:100%;padding:14px;font-size:18px">
-          ${canContinue ? "ANALYZE MY MATCHES →" : "COMPLETE YOUR PROFILE TO CONTINUE"}
-        </button>
-
-        <div class="copyRow" style="margin-top:14px">
-          <button class="btn btnGhost" id="btnBack" style="padding:10px 14px;font-size:14px">← Back</button>
-        </div>
-      </div>
-    `;
-
-    // handlers
-    $("btnBack").onclick = () => go(0);
-
-    $("domainsGrid").querySelectorAll("[data-domain]").forEach(el=>{
-      el.onclick = () => {
-        const k = el.getAttribute("data-domain");
-        const sel = state.profile.domains.includes(k);
-        state.profile.domains = sel ? state.profile.domains.filter(x=>x!==k) : [...state.profile.domains, k];
-        viewProfile();
-      };
-    });
-
-    $("rolesGrid").querySelectorAll("[data-role]").forEach(el=>{
-      el.onclick = () => {
-        state.profile.role = el.getAttribute("data-role");
-        viewProfile();
-      };
-    });
-
-    $("budgetsGrid").querySelectorAll("[data-budget]").forEach(el=>{
-      el.onclick = () => {
-        state.profile.budget = el.getAttribute("data-budget");
-        viewProfile();
-      };
-    });
-
-    $("btnNext").onclick = () => go(2);
-  }
-
-  function viewGenerating(){
-    const app = $("app");
-    const PHASES = [
-      "Scanning 84 open packs…",
-      "Filtering by your domain profile…",
-      "Computing mechanism fit…",
-      "Ranking by P(success)…",
-      "Generating your pack…",
-      "Calculating return scenarios…",
-    ];
-    let phase = 0;
-
-    app.innerHTML = `
-      <div style="max-width:480px;margin:80px auto 0;text-align:center">
-        <div class="spin"></div>
-        <div class="title fu" style="font-size:28px;margin-bottom:8px">Scanning the market for you</div>
-        <div class="fu1" id="phaseText" style="font-family:var(--mono);font-size:11px;color:var(--green);margin-bottom:32px;min-height:20px">${esc(PHASES[0])}</div>
-        <div class="miniSteps" id="phaseList"></div>
-      </div>
-    `;
-
-    function paint(){
-      $("phaseText").textContent = PHASES[phase];
-      const list = PHASES.slice(0, phase+1).map((t,i)=>{
-        const done = i < phase;
-        return `
-          <div class="miniStep" style="opacity:${done?0.4:1}">
-            <span class="miniDot" style="background:${done?"rgba(0,255,136,.3)":"var(--green)"}">${done?"✓":"·"}</span>
-            <span style="font-family:var(--mono);font-size:10px;color:${done?"var(--mid)":"var(--text)"}">${esc(t)}</span>
-          </div>
-        `;
-      }).join("");
-      $("phaseList").innerHTML = list;
-    }
-
-    paint();
-
-    const timer = setInterval(()=>{
-      phase = Math.min(phase+1, PHASES.length-1);
-      paint();
-      if (phase === PHASES.length-1){
-        clearInterval(timer);
-        setTimeout(()=>{
-          state.pack = makePack(state.profile);
-          go(3);
-        }, 650);
-      }
-    }, 800);
-  }
-
-  function viewPack(){
-    const pack = state.pack;
-    const profile = state.profile;
-    const app = $("app");
-
-    const pct = Math.round((pack.p_success || 0.75)*100);
-    const pColor = pct >= 75 ? "var(--green)" : pct >= 55 ? "var(--amber)" : "var(--red)";
-    const multiplier = pack.expected_return_multiplier || 2.1;
-
-    const budgetMap = { low:[10,25,50], mid:[50,100,250], high:[250,500,1000], xl:[500,1000,2500] };
-    const stakeOptions = budgetMap[profile.budget] || [50,100,250];
-    let stake = stakeOptions[1] || stakeOptions[0] || 50;
-
-    function renderStake(){
-      const potentialReturn = Math.round(stake * multiplier);
-      const netGain = potentialReturn - stake;
-      return { potentialReturn, netGain };
-    }
-
-    const meters = [
-      ["EXECUTABILITY", pack.executability, "var(--green)"],
-      ["MECH. CLARITY", pack.mechanism_clarity, "var(--blue)"],
-      ["COST FIT", pack.cost_feasibility, "var(--amber)"],
-    ];
-
-    function stakeButtonsHtml(){
-      return stakeOptions.map(s => `
-        <button class="stakeBtn" data-stake="${s}" style="
-          background:${stake===s?"var(--green)":"var(--bg3)"};
-          color:${stake===s?"#060809":"var(--mid)"};
-        ">$${s}</button>
-      `).join("");
-    }
-
-    function packHtml(){
-      const { potentialReturn, netGain } = renderStake();
-      return `
-        <div style="max-width:700px;margin:0 auto;padding:28px 0 0">
-          <div class="packBanner fu">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
-              <span class="tag">YOUR MATCH · ${esc(pack.id)}</span>
-              <span style="font-family:var(--mono);font-size:9px;color:var(--mid)">${esc(pack.source_domain)} → ${esc(pack.domain)}</span>
-            </div>
-            <div class="title" style="font-size:22px;font-weight:800;line-height:1.2;margin-bottom:8px">${esc(pack.title)}</div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--green);line-height:1.6">↳ ${esc(pack.why_you || "")}</div>
-          </div>
-
-          <div class="grid2 fu1" style="margin-top:12px;margin-bottom:20px">
-            <div class="card" style="padding:20px">
-              <div class="monoSmall" style="letter-spacing:.12em;margin-bottom:8px">PROBABILITY OF SUCCESS</div>
-              <div class="scoreBig" style="color:${pColor};margin-bottom:4px">${pct}%</div>
-              <div class="monoSmall" style="color:var(--mid);margin-bottom:14px">
-                ${pct >= 75 ? "Lowest-hanging-fruit tier" : pct >= 55 ? "Good odds with controls" : "Ambitious — high reward"}
-              </div>
-              <div style="display:flex;flex-direction:column;gap:4px">
-                ${meters.map(([l,v,c])=>`
-                  <div class="meterRow">
-                    <div class="meterLab">${esc(l)}</div>
-                    <div class="meterBar"><div class="meterFill" style="width:${Math.round((v||0)*100)}%;background:${c}"></div></div>
-                    <div style="font-family:var(--mono);font-size:8px;color:${c};width:20px;text-align:right">${Math.round((v||0)*100)}</div>
-                  </div>
-                `).join("")}
-              </div>
-            </div>
-
-            <div class="card" style="padding:20px">
-              <div class="monoSmall" style="letter-spacing:.12em;margin-bottom:8px">RETURN CALCULATOR</div>
-              <div class="monoSmall" style="color:var(--mid);margin-bottom:12px">If this pack PASSES:</div>
-              <div class="stakeBtns" id="stakeBtns">${stakeButtonsHtml()}</div>
-
-              <div style="text-align:center;margin:16px 0 10px">
-                <div class="monoSmall" style="margin-bottom:4px">YOU RECEIVE</div>
-                <div class="title" style="font-family:var(--display);font-weight:900;font-size:48px;line-height:1;color:var(--green)">$${potentialReturn}</div>
-                <div style="font-family:var(--mono);font-size:10px;color:var(--green);margin-top:2px">+$${netGain} profit · ${multiplier}× return</div>
-              </div>
-
-              <div style="padding:8px 10px;border-radius:7px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)">
-                <div style="font-family:var(--mono);font-size:8px;color:var(--dim);display:flex;justify-content:space-between">
-                  <span>EST. TIME TO RESULT</span>
-                  <span style="color:var(--mid)">${esc(pack.time_to_result_days || 9)} days</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="fu2" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
-            <div class="claimBox">
-              <div class="h">THE CLAIM</div>
-              <div style="font-size:13px;color:var(--text);line-height:1.65">${esc(pack.claim)}</div>
-            </div>
-            <div class="failBox">
-              <div class="h">KILL CONDITIONS — WHAT MAKES IT FAIL</div>
-              <div class="t">${esc(pack.falsifier)}</div>
-            </div>
-          </div>
-
-          <div class="grid2 fu3" style="gap:10px">
-            <button class="btn btnPrimary" id="btnBet" style="padding:16px;font-size:20px">BET IT PASSES →</button>
-            <button class="btn btnAlt" id="btnRun" style="padding:16px;font-size:20px">RUN IT MYSELF</button>
-          </div>
-
-          <div class="legal" style="margin-top:10px">
-            Betting = stake on outcome · Running = you do the witnesses and earn the payout
-          </div>
-
-          <div class="copyRow fu4">
-            <button class="btn btnGhost" id="btnBackPack" style="padding:10px 14px;font-size:14px">← Back</button>
-            <button class="btn btnGhost" id="btnIssue" style="padding:10px 14px;font-size:14px">Copy GitHub Issue body</button>
-            <button class="btn btnGhost" id="btnReceipt" style="padding:10px 14px;font-size:14px">Copy receipt stub</button>
-            <a class="btn btnGhost" id="btnOpenIssue" href="#" target="_blank" rel="noopener" style="padding:10px 14px;font-size:14px;text-decoration:none">Open new Issue</a>
-          </div>
-
-          <div class="out" id="outBox" style="display:none"></div>
-        </div>
-      `;
-    }
-
-    app.innerHTML = packHtml();
-
-    function wireStakeButtons(){
-      $("stakeBtns").querySelectorAll("[
+        <div class="fu"
